@@ -36,7 +36,7 @@ public class AuthFilter implements ContainerRequestFilter, ContainerResponseFilt
 	private static final String BASIC = "Basic";
 	
 	@Context
-	protected ServiceFactory serviceFactory;
+	private ServiceFactory serviceFactory;
 	
 	private static final Logger logger = LoggerFactory.getLogger(AuthFilter.class);
 	
@@ -59,19 +59,24 @@ public class AuthFilter implements ContainerRequestFilter, ContainerResponseFilt
 		
 		if ((HttpMethod.POST.equals(requestContext.getMethod()) || HttpMethod.OPTIONS.equals(requestContext.getMethod()))
 				&& Resource.trimPath(requestContext.getUriInfo().getPath()).equals(Resource.trimPath(ResourceMapper.Path.USER))) {
+			logger.debug("Registration request - no authorization is required.");
 			return;
 		}
 		
 		String[] usernamePassword = decodeAuthorization(requestContext.getHeaderString(AUTHORIZATION));
 		
 		if (usernamePassword == null) {
+			logger.debug("Basic Authorization is missing or invalid.");
 			abortRequest(requestContext);
+			return;
 		}
-		
+
 		final User user = serviceFactory.getUserService().checkUser(usernamePassword[0], usernamePassword[1]);
 		
 		if (user == null) {
+			logger.debug("Provided user credentials are not valid.");
 			abortRequest(requestContext);
+			return;
 		} else {
 			requestContext.setProperty(BaseController.USER, user);
 		}

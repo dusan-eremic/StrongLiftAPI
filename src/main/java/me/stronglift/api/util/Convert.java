@@ -9,13 +9,13 @@ import java.time.format.DateTimeParseException;
 import me.stronglift.api.error.ConversionException;
 
 public class Convert {
-	
+
 	public static final String timeFormat = "2007-12-03T10:15:30.00Z";
-	
+
 	public static Instant toInstant(Object iso8601Time) {
-		
+
 		Instant time = null;
-		
+
 		if (iso8601Time == null) {
 			return null;
 		} else if (iso8601Time instanceof String) {
@@ -25,29 +25,32 @@ public class Convert {
 				try {
 					time = Instant.parse((String) iso8601Time);
 				} catch (DateTimeParseException exception) {
-					throw new ConversionException(String.format(
-							"Passed date '%s' is not parsable UTC time format. Time to at least the seconds field is required in the format %s", iso8601Time,
-							timeFormat));
+					throw new ConversionException(
+							String.format(
+									"Passed date '%s' is not parsable UTC time format. Time to at least the seconds field is required in the format %s",
+									iso8601Time, timeFormat));
 				}
 			}
 		} else {
-			throw new ConversionException(String.format("Cannot convert %s to Instant", iso8601Time.getClass().getSimpleName()));
+			throw new ConversionException(String.format(
+					"Cannot convert %s to Instant", iso8601Time.getClass()
+							.getSimpleName()));
 		}
-		
+
 		return time;
 	}
-	
+
 	public static String toString(Instant instant) {
-		
+
 		if (instant == null) {
 			return null;
 		}
-		
+
 		return DateTimeFormatter.ISO_INSTANT.format(instant);
 	}
-	
+
 	public static String toString(Object string) {
-		
+
 		if (string == null) {
 			return null;
 		} else if (string instanceof String) {
@@ -56,29 +59,30 @@ public class Convert {
 			return string.toString();
 		}
 	}
-	
+
 	public static String toString(Double number, int decimals) {
-		
+
 		if (number == null) {
 			return null;
 		}
-		
-		return new BigDecimal(number).setScale(decimals, RoundingMode.HALF_UP).toString();
+
+		return new BigDecimal(number).setScale(decimals, RoundingMode.HALF_UP)
+				.toString();
 	}
-	
+
 	public static String toString(BigDecimal number, int decimals) {
-		
+
 		if (number == null) {
 			return null;
 		}
-		
+
 		return number.setScale(decimals, RoundingMode.HALF_UP).toString();
 	}
-	
+
 	public static Integer toInt(Object integer) {
-		
+
 		final String errorMessage = "Cannot convert %s to Integer";
-		
+
 		if (integer == null) {
 			return null;
 		} else if (integer instanceof Integer) {
@@ -90,18 +94,20 @@ public class Convert {
 				try {
 					return Integer.valueOf((String) integer);
 				} catch (NumberFormatException nfe) {
-					throw new ConversionException(String.format(errorMessage, integer));
+					throw new ConversionException(String.format(errorMessage,
+							integer));
 				}
 			}
 		} else {
-			throw new ConversionException(String.format(errorMessage, integer.getClass().getSimpleName()));
+			throw new ConversionException(String.format(errorMessage, integer
+					.getClass().getSimpleName()));
 		}
 	}
-	
+
 	public static Double toDouble(Object number) {
-		
+
 		final String errorMessage = "Cannot convert %s to Double";
-		
+
 		if (number == null) {
 			return null;
 		} else if (number instanceof Double) {
@@ -115,18 +121,20 @@ public class Convert {
 				try {
 					return Double.valueOf((String) number);
 				} catch (NumberFormatException nfe) {
-					throw new ConversionException(String.format(errorMessage, number));
+					throw new ConversionException(String.format(errorMessage,
+							number));
 				}
 			}
 		} else {
-			throw new ConversionException(String.format(errorMessage, number.getClass().getSimpleName()));
+			throw new ConversionException(String.format(errorMessage, number
+					.getClass().getSimpleName()));
 		}
 	}
-	
+
 	public static BigDecimal toBigDecimal(Object number) {
-		
+
 		final String errorMessage = "Cannot convert %s to BigDecimal";
-		
+
 		if (number == null) {
 			return null;
 		} else if (number instanceof BigDecimal) {
@@ -140,11 +148,22 @@ public class Convert {
 				try {
 					return new BigDecimal((String) number);
 				} catch (NumberFormatException nfe) {
-					throw new ConversionException(String.format(errorMessage, number));
+					throw new ConversionException(String.format(errorMessage,
+							number));
 				}
 			}
 		} else {
-			throw new ConversionException(String.format(errorMessage, number.getClass().getSimpleName()));
+			throw new ConversionException(String.format(errorMessage, number
+					.getClass().getSimpleName()));
 		}
+	}
+
+	public static <T> T toEnum(String name, Class<T> clazz) {
+		for (T t : clazz.getEnumConstants()) {
+			if (t.toString().equalsIgnoreCase(name)) {
+				return t;
+			}
+		}
+		return null;
 	}
 }

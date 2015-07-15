@@ -112,6 +112,10 @@ class EntityFieldMapper {
 			return BigDecimal.class.isAssignableFrom(field.getType());
 		}
 		
+		public boolean isEnum() {
+			return field.getType().isEnum();
+		}
+		
 		public <T extends BaseEntity<T>> Object getValue(T entity) {
 			try {
 				return this.getter.invoke(entity);

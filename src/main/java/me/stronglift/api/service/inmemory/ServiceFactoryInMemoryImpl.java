@@ -1,5 +1,6 @@
 package me.stronglift.api.service.inmemory;
 
+import me.stronglift.api.entity.Lift;
 import me.stronglift.api.service.LiftService;
 import me.stronglift.api.service.ServiceFactory;
 import me.stronglift.api.service.UserService;
@@ -11,15 +12,18 @@ import me.stronglift.api.service.UserService;
  *
  */
 public class ServiceFactoryInMemoryImpl extends ServiceFactory {
-	
+
+	protected LiftService liftService;
+	protected UserService userService;
+
 	@Override
 	public LiftService getLiftService() {
 		if (liftService == null) {
-			liftService = new DemoServiceInMemoryImpl();
+			liftService = new LiftServiceInMemoryImpl();
 		}
 		return liftService;
 	}
-	
+
 	@Override
 	public UserService getUserService() {
 		if (userService == null) {
@@ -27,5 +31,16 @@ public class ServiceFactoryInMemoryImpl extends ServiceFactory {
 		}
 		return userService;
 	}
-	
+
+}
+
+/**
+ * Lift service in-memory implementation
+ * 
+ * @author Dusan Eremic
+ *
+ */
+class LiftServiceInMemoryImpl extends BaseServiceInMemoryImpl<Lift> implements
+		LiftService {
+
 }

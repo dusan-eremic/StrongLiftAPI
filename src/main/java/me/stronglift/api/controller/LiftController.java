@@ -37,8 +37,10 @@ public class LiftController extends BaseController {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response update(Resource<Lift> entityRequest) {
-		Lift entity = serviceFactory.getLiftService().update(user, entityRequest.toEntity(uriInfo, Lift.class));
+	public Response update(@PathParam("id") String id, Resource<Lift> entityRequest) {
+		Lift entity = entityRequest.toEntity(uriInfo, Lift.class);
+		entity.setId(id);
+		entity = serviceFactory.getLiftService().update(user, entity);
 		return updated(entity);
 	}
 	

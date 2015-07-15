@@ -1,14 +1,14 @@
 package me.stronglift.api.service.inmemory;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import javax.ws.rs.NotFoundException;
-
 import me.stronglift.api.entity.BaseEntity;
 import me.stronglift.api.entity.User;
+import me.stronglift.api.error.ResourceNotFoundException;
 import me.stronglift.api.service.BaseService;
 
 import org.slf4j.Logger;
@@ -30,29 +30,37 @@ abstract class BaseServiceInMemoryImpl<T extends BaseEntity<T>> implements BaseS
 	@SuppressWarnings("unchecked")
 	public BaseServiceInMemoryImpl() {
 		this.entityClasss = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-		log.debug("{}ServiceDummy initialized", getEntityName());
+		log.debug("{}InMemoryService initialized", getEntityName());
 	}
 	
 	@Override
 	public List<T> findAll(User user) {
 		
-		log.debug("Retrieving {} entities...", getEntityName());
+		log.debug("Retrieving all {} entities for user {}", getEntityName(), user);
 		
-		return data;
+		List<T> listForUser = new LinkedList<>();
+		
+		for(T t : data) {
+			if(t.getOwner().equals(user)) {
+				listForUser.add(t);
+			}
+		}
+		
+		return listForUser;
 	}
 	
 	@Override
 	public T findOne(User user, String entityId) {
-		log.debug("Retrieving an entity {} with ID {}", getEntityName(), entityId);
+		log.debug("Retrieving one {} entity with ID {} for user {}", getEntityName(), entityId, user);
 		
 		for (T t : data) {
-			if (t.getId().equals(entityId)) {
-				log.debug("The entity {} with ID {} is found, returning the result", getEntityName(), entityId);
-				return t.copy();
+			if (t.getId().equals(entityId) && t.getOwner().equals(user)) {
+				log.debug("An entity {} with ID {} is found, returning the result", getEntityName(), entityId);
+				return t;
 			}
 		}
 		
-		log.debug("The entity {} with ID {} is not found, returning null", getEntityName(), entityId);
+		log.debug("An entity {} with ID {} is not found, returning null", getEntityName(), entityId);
 		return null;
 	}
 	
@@ -60,8 +68,9 @@ abstract class BaseServiceInMemoryImpl<T extends BaseEntity<T>> implements BaseS
 	public T create(User user, T entity) {
 		
 		entity.setId(generateId());
+		entity.setOwner(user);
 		
-		log.debug("Creating a new entity {} with generated ID {}", getEntityName(), entity.getId());
+		log.debug("Creating a new entity {} with generated ID {}, owner {}", getEntityName(), entity.getId(), user);
 		
 		data.add(entity);
 		
@@ -73,22 +82,20 @@ abstract class BaseServiceInMemoryImpl<T extends BaseEntity<T>> implements BaseS
 	@Override
 	public T update(User user, T entity) {
 		
-		log.debug("Updating an entity {} with ID {}", getEntityName(), entity.getId());
+		log.debug("Updating an entity {} with ID {} for user {}", getEntityName(), entity.getId(), user);
 		
 		boolean elementFound = false;
 		
 		for (T t : data) {
-			if (t.getId().equals(entity.getId())) {
-				data.add(data.indexOf(t), entity);
+			if (t.getId().equals(entity.getId()) && t.getOwner().equals(user)) {
+				data.set(data.indexOf(t), entity);
 				elementFound = true;
 				break;
 			}
 		}
 		
 		if (!elementFound) {
-			String message = String.format("An entity %s with ID %s cannot be found.", getEntityName(), entity.getId());
-			log.debug(message);
-			throw new NotFoundException(message);
+			throw new ResourceNotFoundException(entityClasss, entity.getId());
 		}
 		
 		log.debug("The {} entity with ID {} is updated successfully", getEntityName(), entity.getId());

@@ -20,12 +20,16 @@ class UserServiceInMemoryImpl extends BaseServiceInMemoryImpl<User> implements U
 	@Override
 	public User checkUser(String username, String password) {
 		
+		log.debug("Checking username and passwrod for user '{}'", username);
+		
 		for (User user : this.data) {
 			if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+				log.debug("Username and password are valid for user '{}'", username);
 				return user;
 			}
 		}
 		
+		log.debug("Username and password are not valid for user '{}'", username);
 		return null;
 	}
 	
@@ -40,15 +44,16 @@ class UserServiceInMemoryImpl extends BaseServiceInMemoryImpl<User> implements U
 			throw new IllegalArgumentException("Password is not provided!");
 		}
 		
+		username = username.trim();
+		password = password.trim();
+		
 		for (User user : this.data) {
 			if (user.getUsername().equals(username)) {
 				throw new UserAlreadyExistsException(username);
 			}
 		}
 		
-		User user = new User();
-		user.setUsername(username);
-		user.setPassword(password);
+		User user = new User(username, password);
 		user.setId(generateId());
 
 		log.debug("Registering a new user '{}' with the generated ID {}", username, user.getId());

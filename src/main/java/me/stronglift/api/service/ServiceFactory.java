@@ -11,8 +11,6 @@ import me.stronglift.api.service.inmemory.ServiceFactoryInMemoryImpl;
 public abstract class ServiceFactory {
 	
 	private static ServiceFactory serviceFactoryImpl = null;
-	protected LiftService liftService;
-	protected UserService userService;
 	
 	public static enum FactoryImpl {
 		IN_MEMORY
