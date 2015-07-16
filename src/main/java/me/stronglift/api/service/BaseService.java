@@ -10,15 +10,18 @@ import me.stronglift.api.entity.User;
  * 
  * @author Dusan Eremic
  *
- * @param <T> Type of an entity handled by the service.
+ * @param <T>
+ *            Type of an entity handled by the service.
  */
 public interface BaseService<T extends BaseEntity<T>> {
-	
-	public List<T> findAll(User user);
-	
-	public T findOne(User user, String entityId);
-	
-	public T create(User user, T entity);
-	
-	public T update(User user, T entity);
+
+	List<T> findAll(User user);
+
+	T findOne(User user, String entityId);
+
+	T create(User user, T entity);
+
+	T update(User user, T entity);
+
+	boolean delete(User user, String entityId);
 }

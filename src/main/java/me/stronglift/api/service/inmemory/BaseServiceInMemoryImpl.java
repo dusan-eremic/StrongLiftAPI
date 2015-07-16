@@ -21,71 +21,84 @@ import org.slf4j.LoggerFactory;
  *
  * @param <T>
  */
-abstract class BaseServiceInMemoryImpl<T extends BaseEntity<T>> implements BaseService<T> {
-	
-	private static final Logger log = LoggerFactory.getLogger(BaseServiceInMemoryImpl.class);
+abstract class BaseServiceInMemoryImpl<T extends BaseEntity<T>> implements
+		BaseService<T> {
+
+	private static final Logger log = LoggerFactory
+			.getLogger(BaseServiceInMemoryImpl.class);
 	protected final List<T> data = new CopyOnWriteArrayList<>();
 	protected Class<T> entityClasss;
-	
+
 	@SuppressWarnings("unchecked")
 	public BaseServiceInMemoryImpl() {
-		this.entityClasss = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+		this.entityClasss = (Class<T>) ((ParameterizedType) getClass()
+				.getGenericSuperclass()).getActualTypeArguments()[0];
 		log.debug("{}InMemoryService initialized", getEntityName());
 	}
-	
+
 	@Override
 	public List<T> findAll(User user) {
-		
-		log.debug("Retrieving all {} entities for user {}", getEntityName(), user);
-		
+
+		log.debug("Retrieving all {} entities for user {}", getEntityName(),
+				user);
+
 		List<T> listForUser = new LinkedList<>();
-		
-		for(T t : data) {
-			if(t.getOwner().equals(user)) {
+
+		for (T t : data) {
+			if (t.getOwner().equals(user)) {
 				listForUser.add(t);
 			}
 		}
-		
+
 		return listForUser;
 	}
-	
+
 	@Override
 	public T findOne(User user, String entityId) {
-		log.debug("Retrieving one {} entity with ID {} for user {}", getEntityName(), entityId, user);
-		
+		log.debug("Retrieving one {} entity with ID {} for user {}",
+				getEntityName(), entityId, user);
+
 		for (T t : data) {
 			if (t.getId().equals(entityId) && t.getOwner().equals(user)) {
-				log.debug("An entity {} with ID {} is found, returning the result", getEntityName(), entityId);
+				log.debug(
+						"An entity {} with ID {} is found, returning the result",
+						getEntityName(), entityId);
 				return t;
 			}
 		}
-		
-		log.debug("An entity {} with ID {} is not found, returning null", getEntityName(), entityId);
+
+		log.debug("An entity {} with ID {} is not found, returning null",
+				getEntityName(), entityId);
+
 		return null;
 	}
-	
+
 	@Override
 	public T create(User user, T entity) {
-		
+
 		entity.setId(generateId());
 		entity.setOwner(user);
-		
-		log.debug("Creating a new entity {} with generated ID {}, owner {}", getEntityName(), entity.getId(), user);
-		
-		data.add(entity);
-		
+
+		log.debug("Creating a new entity {} with generated ID {}, owner {}",
+				getEntityName(), entity.getId(), entity.getOwner());
+
+		data.add(0, entity);
+
 		log.debug("{} entity count: {}", getEntityName(), data.size());
-		
+
 		return entity;
 	}
-	
+
 	@Override
 	public T update(User user, T entity) {
-		
-		log.debug("Updating an entity {} with ID {} for user {}", getEntityName(), entity.getId(), user);
-		
+
+		entity.setOwner(user);
+
+		log.debug("Updating an entity {} with ID {} for user {}",
+				getEntityName(), entity.getId(), entity.getOwner());
+
 		boolean elementFound = false;
-		
+
 		for (T t : data) {
 			if (t.getId().equals(entity.getId()) && t.getOwner().equals(user)) {
 				data.set(data.indexOf(t), entity);
@@ -93,20 +106,44 @@ abstract class BaseServiceInMemoryImpl<T extends BaseEntity<T>> implements BaseS
 				break;
 			}
 		}
-		
+
 		if (!elementFound) {
 			throw new ResourceNotFoundException(entityClasss, entity.getId());
 		}
-		
-		log.debug("The {} entity with ID {} is updated successfully", getEntityName(), entity.getId());
-		
+
+		log.debug("The {} entity with ID {} is updated successfully",
+				getEntityName(), entity.getId());
+
 		return entity;
 	}
-	
+
+	@Override
+	public boolean delete(User user, String entityId) {
+
+		log.debug("Deliting {} entity with ID {} for user {}", getEntityName(),
+				entityId, user);
+
+		for (T t : data) {
+			if (t.getId().equals(entityId) && t.getOwner().equals(user)) {
+				log.debug(
+						"An entity {} with ID {} is found and deleted",
+						getEntityName(), entityId);
+				data.remove(t);
+				log.debug("{} entity count: {}", getEntityName(), data.size());
+				return true;
+			}
+		}
+
+		log.debug("An entity {} with ID {} is not found!", getEntityName(),
+				entityId);
+		
+		return false;
+	}
+
 	protected String getEntityName() {
 		return this.entityClasss.getSimpleName();
 	}
-	
+
 	protected static String generateId() {
 		return UUID.randomUUID().toString().replaceAll("-", "");
 	}

@@ -10,7 +10,7 @@ import me.stronglift.api.error.ConversionException;
 
 public class Convert {
 
-	public static final String timeFormat = "2007-12-03T10:15:30.00Z";
+	public static final String timeFormat = "2007-12-03T10:15:30.000Z";
 
 	public static Instant toInstant(Object iso8601Time) {
 
@@ -141,6 +141,8 @@ public class Convert {
 			return (BigDecimal) number;
 		} else if (number instanceof Integer) {
 			return new BigDecimal((Integer) number);
+		} else if (number instanceof Double) {
+			return new BigDecimal((Double) number);
 		} else if (number instanceof String) {
 			if (!StringUtils.hasLength((String) number)) {
 				return null;

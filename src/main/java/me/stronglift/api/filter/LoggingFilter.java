@@ -36,7 +36,7 @@ public class LoggingFilter implements ContainerRequestFilter,
 			ContainerResponseContext responseContext) throws IOException {
 		int httpStatus = responseContext.getStatus();
 		Object entity = responseContext.getEntity();
-
+		
 		logger.debug("Response (status {}), Entity: {}", httpStatus, entity);
 	}
 

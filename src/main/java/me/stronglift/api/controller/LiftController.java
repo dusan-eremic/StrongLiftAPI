@@ -1,6 +1,7 @@
 package me.stronglift.api.controller;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -24,45 +25,61 @@ import me.stronglift.api.error.ResourceNotFoundException;
  */
 @Path(ResourceMapper.Path.LIFT)
 public class LiftController extends BaseController {
-	
+
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response create(Resource<Lift> entityRequest) {
-		Lift entity = serviceFactory.getLiftService().create(user, entityRequest.toEntity(uriInfo, Lift.class));
+		Lift entity = serviceFactory.getLiftService().create(user,
+				entityRequest.toEntity(uriInfo, Lift.class));
 		return created(entity);
 	}
-	
+
 	@Path("/{id}")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response update(@PathParam("id") String id, Resource<Lift> entityRequest) {
+	public Response update(@PathParam("id") String id,
+			Resource<Lift> entityRequest) {
 		Lift entity = entityRequest.toEntity(uriInfo, Lift.class);
 		entity.setId(id);
 		entity = serviceFactory.getLiftService().update(user, entity);
 		return updated(entity);
 	}
-	
+
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public CollectionResource<Lift> getAll() {
-		return new CollectionResource<>(uriInfo, serviceFactory.getLiftService().findAll(user));
+		return new CollectionResource<>(uriInfo, serviceFactory
+				.getLiftService().findAll(user));
 	}
-	
+
 	@Path("/{id}")
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Resource<Lift> getOne(@PathParam("id") String id) {
-		
+
 		Lift entity = serviceFactory.getLiftService().findOne(user, id);
-		
+
 		if (entity == null) {
 			throw new ResourceNotFoundException(Lift.class, id);
 		}
-		
+
 		return new Resource<>(uriInfo, LinkType.INSTANCE, entity);
+	}
+
+	@Path("/{id}")
+	@DELETE
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response deleteOne(@PathParam("id") String id) {
+
+		if (serviceFactory.getLiftService().delete(user, id)) {
+			return Response.ok().build();
+		} else {
+			throw new ResourceNotFoundException(Lift.class, id);
+		}
 	}
 }

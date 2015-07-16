@@ -7,6 +7,8 @@ import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
@@ -41,13 +43,10 @@ public class ApiApplication extends ResourceConfig {
 		});
 		
 		final JacksonJsonProvider json = new JacksonJsonProvider();
-		json.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 		json.configure(SerializationFeature.INDENT_OUTPUT, true);
 		register(json);
 		
 		property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true); // Sends an error message inside the response body
-		
-		register(DeclarativeLinkingFeature.class);
 	}
 	
 }
