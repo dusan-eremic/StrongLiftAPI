@@ -1,5 +1,8 @@
 package me.stronglift.api.controller;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -24,9 +27,9 @@ public class UserController extends BaseController {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response register(Resource<User> entityRequest) throws UserAlreadyExistsException {
+	public Response register(Resource<User> entityRequest) throws UserAlreadyExistsException, URISyntaxException {
 		User user = entityRequest.toEntity(uriInfo, User.class);
 		user = serviceFactory.getUserService().register(user.getUsername(), user.getPassword());
-		return Response.created(null).build();
+		return Response.created(new URI("https://www.facebook.com/")).build();
 	}
 }

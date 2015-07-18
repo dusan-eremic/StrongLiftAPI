@@ -1,6 +1,5 @@
 package me.stronglift.api.service.inmemory;
 
-import me.stronglift.api.entity.Lift;
 import me.stronglift.api.service.LiftService;
 import me.stronglift.api.service.ServiceFactory;
 import me.stronglift.api.service.UserService;
@@ -31,16 +30,5 @@ public class ServiceFactoryInMemoryImpl extends ServiceFactory {
 		}
 		return userService;
 	}
-
-}
-
-/**
- * Lift service in-memory implementation
- * 
- * @author Dusan Eremic
- *
- */
-class LiftServiceInMemoryImpl extends BaseServiceInMemoryImpl<Lift> implements
-		LiftService {
 
 }

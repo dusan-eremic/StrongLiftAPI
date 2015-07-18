@@ -13,27 +13,27 @@ import me.stronglift.api.entity.annotation.Serialize;
  *
  */
 public class Lift extends BaseEntity<Lift> {
-	
+
 	private static final long serialVersionUID = 8923268886165664894L;
-	
+
 	@Deserialize
 	@Serialize
 	private LiftType liftType;
-	
+
 	@Deserialize
 	@Serialize
 	private Integer repetition;
-	
+
 	@Deserialize
 	@Serialize
 	private BigDecimal weight;
-	
+
 	@Deserialize
 	@Serialize
 	private Instant time;
-	
+
 	public Lift() {
-		
+
 	}
 
 	public LiftType getLiftType() {
@@ -66,6 +66,17 @@ public class Lift extends BaseEntity<Lift> {
 
 	public void setTime(Instant time) {
 		this.time = time;
+	}
+
+	public BigDecimal calcOneRepMax() {
+		if (weight == null || !(weight.doubleValue() > 0) || repetition == null
+				|| !(repetition > 0)) {
+			return new BigDecimal(0).setScale(2);
+		} else {
+			return new BigDecimal(weight.doubleValue()
+					/ (1.0278 - (0.0278 * repetition))).setScale(2,
+					BigDecimal.ROUND_HALF_UP);
+		}
 	}
 
 	@Override

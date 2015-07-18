@@ -55,6 +55,10 @@ public class AuthFilter implements ContainerRequestFilter,
 				"GET, POST, DELETE, PUT");
 		responseContext.getHeaders().add("Access-Control-Allow-Headers",
 				"Authorization, Content-Type, x-api-version");
+		
+		int httpStatus = responseContext.getStatus();
+		Object entity = responseContext.getEntity();
+		logger.debug("Response (status {}), Entity: {}", httpStatus, entity);
 	}
 
 	/**
@@ -63,6 +67,9 @@ public class AuthFilter implements ContainerRequestFilter,
 	@Override
 	public void filter(ContainerRequestContext requestContext)
 			throws IOException {
+		
+		logger.debug("Requesting {} method for path {}", requestContext
+				.getMethod(), requestContext.getUriInfo().getRequestUri());
 
 		if ((HttpMethod.POST.equals(requestContext.getMethod()) || HttpMethod.OPTIONS
 				.equals(requestContext.getMethod()))

@@ -82,4 +82,13 @@ public class LiftController extends BaseController {
 			throw new ResourceNotFoundException(Lift.class, id);
 		}
 	}
+
+	@Path("/records/")
+	@GET
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public CollectionResource<Lift> getRecords() {
+		return new CollectionResource<>(uriInfo, serviceFactory
+				.getLiftService().getRecords(user));
+	}
 }
