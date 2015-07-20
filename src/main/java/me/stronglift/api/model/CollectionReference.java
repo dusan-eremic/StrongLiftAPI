@@ -1,4 +1,4 @@
-package me.stronglift.api.entity;
+package me.stronglift.api.model;
 
 /**
  * This class represents a reference to another {@link BaseEntity} - it is holding its ID and optionally the full instance of the referenced collection.

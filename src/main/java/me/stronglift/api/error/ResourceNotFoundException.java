@@ -2,7 +2,7 @@ package me.stronglift.api.error;
 
 import javax.ws.rs.NotFoundException;
 
-import me.stronglift.api.entity.BaseEntity;
+import me.stronglift.api.model.BaseEntity;
 
 /**
  * This exception shoud be thrown when a resource with specified ID is not found.

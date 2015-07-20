@@ -10,11 +10,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import me.stronglift.api.entity.BaseEntity;
-import me.stronglift.api.entity.CollectionReference;
-import me.stronglift.api.entity.EntityReference;
 import me.stronglift.api.entity.annotation.Deserialize;
 import me.stronglift.api.entity.annotation.Serialize;
+import me.stronglift.api.model.BaseEntity;
+import me.stronglift.api.model.CollectionReference;
+import me.stronglift.api.model.EntityReference;
 
 class EntityFieldMapper {
 	

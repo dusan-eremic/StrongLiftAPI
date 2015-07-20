@@ -1,7 +1,7 @@
 package me.stronglift.api.service;
 
-import me.stronglift.api.entity.User;
 import me.stronglift.api.error.UserAlreadyExistsException;
+import me.stronglift.api.model.User;
 
 /**
  * User service interface

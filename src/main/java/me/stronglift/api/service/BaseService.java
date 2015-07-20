@@ -2,8 +2,8 @@ package me.stronglift.api.service;
 
 import java.util.List;
 
-import me.stronglift.api.entity.BaseEntity;
-import me.stronglift.api.entity.User;
+import me.stronglift.api.model.BaseEntity;
+import me.stronglift.api.model.User;
 
 /**
  * Base interface for common operations for all entities.

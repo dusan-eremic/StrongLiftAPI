@@ -3,9 +3,9 @@ package me.stronglift.api.service.inmemory;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.stronglift.api.entity.Lift;
-import me.stronglift.api.entity.LiftType;
-import me.stronglift.api.entity.User;
+import me.stronglift.api.model.Lift;
+import me.stronglift.api.model.LiftType;
+import me.stronglift.api.model.User;
 import me.stronglift.api.service.LiftService;
 
 /**

@@ -7,7 +7,7 @@ import java.util.List;
 import javax.ws.rs.core.UriInfo;
 
 import me.stronglift.api.controller.resource.ResourceLink.LinkType;
-import me.stronglift.api.entity.BaseEntity;
+import me.stronglift.api.model.BaseEntity;
 
 /**
  * Collection resource

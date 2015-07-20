@@ -1,4 +1,4 @@
-package me.stronglift.api.entity;
+package me.stronglift.api.model;
 
 /**
  * Created by Dusan Eremic.

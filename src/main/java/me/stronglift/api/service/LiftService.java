@@ -2,8 +2,8 @@ package me.stronglift.api.service;
 
 import java.util.List;
 
-import me.stronglift.api.entity.Lift;
-import me.stronglift.api.entity.User;
+import me.stronglift.api.model.Lift;
+import me.stronglift.api.model.User;
 
 /**
  * Lift service interface

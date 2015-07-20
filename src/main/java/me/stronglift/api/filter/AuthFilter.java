@@ -14,7 +14,7 @@ import javax.ws.rs.ext.Provider;
 import me.stronglift.api.controller.BaseController;
 import me.stronglift.api.controller.resource.Resource;
 import me.stronglift.api.controller.resource.ResourceMapper;
-import me.stronglift.api.entity.User;
+import me.stronglift.api.model.User;
 import me.stronglift.api.service.ServiceFactory;
 import me.stronglift.api.util.HttpMethod;
 

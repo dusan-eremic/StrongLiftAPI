@@ -10,8 +10,8 @@ import javax.ws.rs.core.UriInfo;
 
 import me.stronglift.api.controller.resource.Resource;
 import me.stronglift.api.controller.resource.ResourceLink.LinkType;
-import me.stronglift.api.entity.BaseEntity;
-import me.stronglift.api.entity.User;
+import me.stronglift.api.model.BaseEntity;
+import me.stronglift.api.model.User;
 import me.stronglift.api.service.ServiceFactory;
 
 /**
@@ -43,7 +43,8 @@ public abstract class BaseController {
 	}
 	
 	protected <T extends BaseEntity<T>> Response created(T entity) {
-		return Response.created(URI.create(uriInfo.getAbsolutePath().toString())).entity(new Resource<>(uriInfo, LinkType.SELF, entity)).build();
+		URI path = uriInfo.getAbsolutePathBuilder().path(entity.getId()).build();
+		return Response.created(path).entity(new Resource<>(uriInfo, LinkType.SELF, entity)).build();
 	}
 	
 	protected <T extends BaseEntity<T>> Response updated(T entity) {

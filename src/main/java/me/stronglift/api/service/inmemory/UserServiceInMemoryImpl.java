@@ -1,7 +1,7 @@
 package me.stronglift.api.service.inmemory;
 
-import me.stronglift.api.entity.User;
 import me.stronglift.api.error.UserAlreadyExistsException;
+import me.stronglift.api.model.User;
 import me.stronglift.api.service.UserService;
 
 import org.slf4j.Logger;
@@ -55,7 +55,8 @@ class UserServiceInMemoryImpl extends BaseServiceInMemoryImpl<User> implements U
 		
 		User user = new User(username, password);
 		user.setId(generateId());
-
+		user.getOwner().attach(user);
+		
 		log.debug("Registering a new user '{}' with the generated ID {}", username, user.getId());
 		data.add(user);
 		log.debug("{} entity count: {}", getEntityName(), data.size());

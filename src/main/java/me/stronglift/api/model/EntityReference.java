@@ -1,4 +1,4 @@
-package me.stronglift.api.entity;
+package me.stronglift.api.model;
 
 import javax.lang.model.type.ReferenceType;
 
@@ -19,6 +19,8 @@ public class EntityReference<T extends BaseEntity<T>> implements Comparable<Enti
 	
 	/** Full instance of the referenced entity */
 	private T entityInstance = null;
+	
+	private boolean serializable = true;
 	
 	/**
 	 * Default constructor
@@ -100,6 +102,14 @@ public class EntityReference<T extends BaseEntity<T>> implements Comparable<Enti
 	 */
 	public String getId() {
 		return id;
+	}
+	
+	public boolean isSerializable() {
+		return serializable;
+	}
+	
+	public void setSerializable(boolean serializable) {
+		this.serializable = serializable;
 	}
 	
 	/**

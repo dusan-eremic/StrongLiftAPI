@@ -1,4 +1,4 @@
-package me.stronglift.api.entity;
+package me.stronglift.api.model;
 
 import java.math.BigDecimal;
 import java.time.Instant;

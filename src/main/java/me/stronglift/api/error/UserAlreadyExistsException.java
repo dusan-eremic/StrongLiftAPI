@@ -1,6 +1,6 @@
 package me.stronglift.api.error;
 
-import me.stronglift.api.entity.BaseEntity;
+import me.stronglift.api.model.BaseEntity;
 
 public class UserAlreadyExistsException extends Exception {
 	

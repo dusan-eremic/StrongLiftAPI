@@ -4,11 +4,12 @@ import java.net.URI;
 
 import javax.ws.rs.core.UriBuilder;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-import me.stronglift.api.entity.BaseEntity;
-import me.stronglift.api.entity.CollectionReference;
-import me.stronglift.api.entity.EntityReference;
+import me.stronglift.api.model.BaseEntity;
+import me.stronglift.api.model.CollectionReference;
+import me.stronglift.api.model.EntityReference;
 import me.stronglift.api.util.Convert;
+
+import com.fasterxml.jackson.annotation.JsonValue;
 
 public class ResourceLink {
 	
@@ -32,17 +33,17 @@ public class ResourceLink {
 		return new ResourceLink(uri, type);
 	}
 	
-	public static <T extends BaseEntity<T>> ResourceLink link(URI baseUri, LinkType type, T entity) {
+	public static <T extends BaseEntity<T>> ResourceLink link(URI absoultePath, LinkType type, T entity) {
 		
 		if (entity.getId() == null) {
 			throw new IllegalArgumentException("Entity ID cannot be null!");
 		}
 		
-		return new ResourceLink(//
-				UriBuilder.fromUri(baseUri) //
-						// .path(ResourceMapper.getPathForResourceClass(entity.getClass())) //
-						.path(entity.getId()).build() //
-				, type);
+		if (absoultePath.toString().contains(entity.getId())) {
+			return new ResourceLink(absoultePath, type);
+		} else {
+			return new ResourceLink(UriBuilder.fromUri(absoultePath).path(entity.getId()).build(), type);
+		}
 	}
 	
 	public static <T extends BaseEntity<T>> ResourceLink link(URI baseUri, LinkType type, final EntityReference<T> reference) {
@@ -63,8 +64,6 @@ public class ResourceLink {
 		
 		return new ResourceLink( //
 				UriBuilder.fromUri(baseUri) //
-						.path(ResourceMapper.getPathForResourceClass(collectionReference.getParentClass())) //
-						.path(Convert.toString(collectionReference.getParentId())) //
 						.path(ResourceMapper.getPathForResourceClass(collectionReference.getCollectionClass())) //
 						.build() //
 				, type);

@@ -2,9 +2,9 @@ package me.stronglift.api.controller.resource;
 
 import java.util.ArrayList;
 
-import me.stronglift.api.entity.BaseEntity;
-import me.stronglift.api.entity.Lift;
-import me.stronglift.api.entity.User;
+import me.stronglift.api.model.BaseEntity;
+import me.stronglift.api.model.Lift;
+import me.stronglift.api.model.User;
 
 /**
  * All resource paths must be mapped here.
@@ -15,7 +15,7 @@ import me.stronglift.api.entity.User;
 public enum ResourceMapper {
 	
 	lifts(Path.LIFT, Lift.class), //
-	users(Path.LIFT, User.class);
+	users(Path.USER, User.class);
 	
 	final private String resourcePath;
 	final private Class<?> entityClass;

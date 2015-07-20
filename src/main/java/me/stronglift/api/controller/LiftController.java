@@ -14,8 +14,8 @@ import me.stronglift.api.controller.resource.CollectionResource;
 import me.stronglift.api.controller.resource.Resource;
 import me.stronglift.api.controller.resource.ResourceLink.LinkType;
 import me.stronglift.api.controller.resource.ResourceMapper;
-import me.stronglift.api.entity.Lift;
 import me.stronglift.api.error.ResourceNotFoundException;
+import me.stronglift.api.model.Lift;
 
 /**
  * Lift resource
