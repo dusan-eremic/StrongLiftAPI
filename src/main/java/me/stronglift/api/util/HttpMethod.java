@@ -1,5 +1,11 @@
 package me.stronglift.api.util;
 
+/**
+ * HTTP methods constants
+ * 
+ * @author Dusan Eremic
+ *
+ */
 public class HttpMethod {
 	
 	public static final HttpMethod DELETE = new HttpMethod("DELETE");
@@ -24,6 +30,5 @@ public class HttpMethod {
 		}
 		
 		return this.methodName.equalsIgnoreCase((String) obj);
-		
 	}
 }

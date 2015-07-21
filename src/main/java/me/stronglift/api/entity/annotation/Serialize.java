@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation used to indicate when value of the annotated field is to be serialized to a response.
+ * Anotacija za polja model klase koja će biti serijalizovana.
  * 
  * @author Dusan Eremic
  */

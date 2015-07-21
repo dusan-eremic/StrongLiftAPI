@@ -5,16 +5,17 @@ import me.stronglift.api.service.ServiceFactory;
 import me.stronglift.api.service.UserService;
 
 /**
- * The factory that creates DummyImpl services.
+ * Fabrika koja proizvodi in-memory servise
  * 
  * @author Dusan Eremic
  *
  */
 public class ServiceFactoryInMemoryImpl extends ServiceFactory {
-
+	
 	protected LiftService liftService;
 	protected UserService userService;
-
+	
+	/** Vraća {@link LiftService} */
 	@Override
 	public LiftService getLiftService() {
 		if (liftService == null) {
@@ -22,7 +23,8 @@ public class ServiceFactoryInMemoryImpl extends ServiceFactory {
 		}
 		return liftService;
 	}
-
+	
+	/** Vraća {@link UserService} */
 	@Override
 	public UserService getUserService() {
 		if (userService == null) {
@@ -30,5 +32,5 @@ public class ServiceFactoryInMemoryImpl extends ServiceFactory {
 		}
 		return userService;
 	}
-
+	
 }

@@ -51,8 +51,8 @@ public abstract class BaseController {
 	private ContainerRequestContext request;
 	
 	/**
-	 * Metoda koja će biti pozvana nakon konstruktora i koja će uzeti User-a iz
-	 * request contexta i smestiti ga u class field.
+	 * Metoda koja će biti pozvana nakon konstruktora. Uzeće User-a iz request
+	 * contexta i smestiti ga u class field.
 	 */
 	@PostConstruct
 	private void setUser() {

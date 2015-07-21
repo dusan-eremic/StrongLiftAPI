@@ -4,9 +4,6 @@ import java.util.Arrays;
 
 /**
  * Various object utility methods.
- * 
- * @author Dusan Eremic
- *
  */
 public class ObjectUtils {
 	
@@ -59,10 +56,12 @@ public class ObjectUtils {
 	}
 	
 	/**
-	 * Determine if the given objects are equal, returning <code>true</code> if both are <code>null</code> or <code>false</code> if only one is
+	 * Determine if the given objects are equal, returning <code>true</code> if
+	 * both are <code>null</code> or <code>false</code> if only one is
 	 * <code>null</code>.
 	 * <p>
-	 * Compares arrays with <code>Arrays.equals</code>, performing an equality check based on the array elements rather than the array reference.
+	 * Compares arrays with <code>Arrays.equals</code>, performing an equality
+	 * check based on the array elements rather than the array reference.
 	 *
 	 * @param o1 first Object to compare
 	 * @param o2 second Object to compare
@@ -112,8 +111,11 @@ public class ObjectUtils {
 	}
 	
 	/**
-	 * Return as hash code for the given object; typically the value of <code>{@link Object#hashCode()}</code>. If the object is an array, this method will
-	 * delegate to any of the <code>nullSafeHashCode</code> methods for arrays in this class. If the object is <code>null</code>, this method returns 0.
+	 * Return as hash code for the given object; typically the value of
+	 * <code>{@link Object#hashCode()}</code>. If the object is an array, this
+	 * method will delegate to any of the <code>nullSafeHashCode</code> methods
+	 * for arrays in this class. If the object is <code>null</code>, this method
+	 * returns 0.
 	 *
 	 * @param obj the object for which to generate a hash code.
 	 * @return the hash code, or {@code 0} if the object is null.
@@ -164,7 +166,8 @@ public class ObjectUtils {
 	}
 	
 	/**
-	 * Return a hash code based on the contents of the specified array. If <code>array</code> is <code>null</code>, this method returns 0.
+	 * Return a hash code based on the contents of the specified array. If
+	 * <code>array</code> is <code>null</code>, this method returns 0.
 	 *
 	 * @param array the array for which to generate a hash code.
 	 * @return the array's hash code
@@ -181,7 +184,8 @@ public class ObjectUtils {
 	}
 	
 	/**
-	 * Return a hash code based on the contents of the specified array. If <code>array</code> is <code>null</code>, this method returns 0.
+	 * Return a hash code based on the contents of the specified array. If
+	 * <code>array</code> is <code>null</code>, this method returns 0.
 	 *
 	 * @param array the boolean array to hash
 	 * @return the generated hash code
@@ -198,7 +202,8 @@ public class ObjectUtils {
 	}
 	
 	/**
-	 * Return a hash code based on the contents of the specified array. If <code>array</code> is <code>null</code>, this method returns 0.
+	 * Return a hash code based on the contents of the specified array. If
+	 * <code>array</code> is <code>null</code>, this method returns 0.
 	 *
 	 * @param array the byte array to hash
 	 * @return the generated hash code
@@ -215,7 +220,8 @@ public class ObjectUtils {
 	}
 	
 	/**
-	 * Return a hash code based on the contents of the specified array. If <code>array</code> is <code>null</code>, this method returns 0.
+	 * Return a hash code based on the contents of the specified array. If
+	 * <code>array</code> is <code>null</code>, this method returns 0.
 	 *
 	 * @param array the char array to hash
 	 * @return the generated hash code
@@ -233,7 +239,8 @@ public class ObjectUtils {
 	}
 	
 	/**
-	 * Return a hash code based on the contents of the specified array. If <code>array</code> is <code>null</code>, this method returns 0.
+	 * Return a hash code based on the contents of the specified array. If
+	 * <code>array</code> is <code>null</code>, this method returns 0.
 	 *
 	 * @param array the double array to hash
 	 * @return the generated hash code
@@ -251,7 +258,8 @@ public class ObjectUtils {
 	}
 	
 	/**
-	 * Return a hash code based on the contents of the specified array. If <code>array</code> is <code>null</code>, this method returns 0.
+	 * Return a hash code based on the contents of the specified array. If
+	 * <code>array</code> is <code>null</code>, this method returns 0.
 	 *
 	 * @param array the float array to hash
 	 * @return the generated hash code
@@ -269,7 +277,8 @@ public class ObjectUtils {
 	}
 	
 	/**
-	 * Return a hash code based on the contents of the specified array. If <code>array</code> is <code>null</code>, this method returns 0.
+	 * Return a hash code based on the contents of the specified array. If
+	 * <code>array</code> is <code>null</code>, this method returns 0.
 	 *
 	 * @param array the int array to hash
 	 * @return the generated hash code
@@ -287,7 +296,8 @@ public class ObjectUtils {
 	}
 	
 	/**
-	 * Return a hash code based on the contents of the specified array. If <code>array</code> is <code>null</code>, this method returns 0.
+	 * Return a hash code based on the contents of the specified array. If
+	 * <code>array</code> is <code>null</code>, this method returns 0.
 	 *
 	 * @param array the long array to hash
 	 * @return the generated hash code
@@ -305,7 +315,8 @@ public class ObjectUtils {
 	}
 	
 	/**
-	 * Return a hash code based on the contents of the specified array. If <code>array</code> is <code>null</code>, this method returns 0.
+	 * Return a hash code based on the contents of the specified array. If
+	 * <code>array</code> is <code>null</code>, this method returns 0.
 	 *
 	 * @param array the short array to hash
 	 * @return the generated hash code

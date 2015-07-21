@@ -18,14 +18,17 @@ import me.stronglift.api.error.ResourceNotFoundException;
 import me.stronglift.api.model.Lift;
 
 /**
- * Lift resource
+ * Lift resource controller
  * 
  * @author Dusan Eremic
  *
  */
 @Path(ResourceMapper.Path.LIFT)
 public class LiftController extends BaseController {
-
+	
+	/**
+	 * Handler za kreiranje novog Lifta resursa.
+	 */
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -34,7 +37,10 @@ public class LiftController extends BaseController {
 				entityRequest.toEntity(uriInfo, Lift.class));
 		return created(entity);
 	}
-
+	
+	/**
+	 * Handler za ažuriranje postojećeg Lift resursa.
+	 */
 	@Path("/{id}")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -46,7 +52,10 @@ public class LiftController extends BaseController {
 		entity = serviceFactory.getLiftService().update(user, entity);
 		return updated(entity);
 	}
-
+	
+	/**
+	 * Handler koji vraća kolekciju Lift resursa.
+	 */
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -54,35 +63,44 @@ public class LiftController extends BaseController {
 		return new CollectionResource<>(uriInfo, serviceFactory
 				.getLiftService().findAll(user));
 	}
-
+	
+	/**
+	 * Handler koji vraća jedan Lift resurs po ID-ju.
+	 */
 	@Path("/{id}")
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Resource<Lift> getOne(@PathParam("id") String id) {
-
+		
 		Lift entity = serviceFactory.getLiftService().findOne(user, id);
-
+		
 		if (entity == null) {
 			throw new ResourceNotFoundException(Lift.class, id);
 		}
-
+		
 		return new Resource<>(uriInfo, LinkType.INSTANCE, entity);
 	}
-
+	
+	/**
+	 * Handler koji briše jedan Lift resurs po ID-ju.
+	 */
 	@Path("/{id}")
 	@DELETE
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteOne(@PathParam("id") String id) {
-
+		
 		if (serviceFactory.getLiftService().delete(user, id)) {
 			return Response.ok().build();
 		} else {
 			throw new ResourceNotFoundException(Lift.class, id);
 		}
 	}
-
+	
+	/**
+	 * Handler koji vraća kolekciju Lift resursa koji su rekordi.
+	 */
 	@Path("/records/")
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)

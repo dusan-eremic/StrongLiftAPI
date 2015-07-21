@@ -8,23 +8,31 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * User service In-memory implementation
+ * Operacije specifične za {@link User} entitet.
  * 
  * @author Dusan Eremic
  *
  */
-class UserServiceInMemoryImpl extends BaseServiceInMemoryImpl<User> implements UserService {
+class UserServiceInMemoryImpl extends BaseServiceInMemoryImpl<User> implements
+		UserService {
 	
-	private static final Logger log = LoggerFactory.getLogger(UserServiceInMemoryImpl.class);
+	private static final Logger log = LoggerFactory
+			.getLogger(UserServiceInMemoryImpl.class);
 	
+	/**
+	 * Autentifikuje korisnika, vraća User instancu ukoliko je autentifikacija
+	 * uspela, ako nije varća null.
+	 */
 	@Override
 	public User checkUser(String username, String password) {
 		
 		log.debug("Checking username and passwrod for user '{}'", username);
 		
 		for (User user : this.data) {
-			if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-				log.debug("Username and password are valid for user '{}'", username);
+			if (user.getUsername().equals(username)
+					&& user.getPassword().equals(password)) {
+				log.debug("Username and password are valid for user '{}'",
+						username);
 				return user;
 			}
 		}
@@ -33,8 +41,15 @@ class UserServiceInMemoryImpl extends BaseServiceInMemoryImpl<User> implements U
 		return null;
 	}
 	
+	/**
+	 * Registruje novog korisnika.
+	 * 
+	 * @return User instancu ukoliko je registracija uspela.
+	 * @throws UserAlreadyExistsException Ukoliko je username zauzet.
+	 */
 	@Override
-	public User register(String username, String password) throws UserAlreadyExistsException {
+	public User register(String username, String password)
+			throws UserAlreadyExistsException {
 		
 		if (username == null || username.trim().isEmpty()) {
 			throw new IllegalArgumentException("Username is not provided!");
@@ -57,7 +72,8 @@ class UserServiceInMemoryImpl extends BaseServiceInMemoryImpl<User> implements U
 		user.setId(generateId());
 		user.getOwner().attach(user);
 		
-		log.debug("Registering a new user '{}' with the generated ID {}", username, user.getId());
+		log.debug("Registering a new user '{}' with the generated ID {}",
+				username, user.getId());
 		data.add(user);
 		log.debug("{} entity count: {}", getEntityName(), data.size());
 		

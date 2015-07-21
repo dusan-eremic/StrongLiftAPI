@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation used to indicate when value of the annotated field is to be deserialized from a received create/update request.
+ * Anotacija za polja model klase koja će biti deserijalizovana.
  * 
  * @author Dusan Eremic
  */

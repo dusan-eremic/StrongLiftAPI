@@ -16,11 +16,24 @@ import me.stronglift.api.model.BaseEntity;
 import me.stronglift.api.model.CollectionReference;
 import me.stronglift.api.model.EntityReference;
 
+/**
+ * EntityFieldMapper koristi Java refleksiju da skenira sva polja svih model
+ * klasa mapiranih u {@link ResourceMapper}-u i potom može za svaku model klasu
+ * da vrati sva polja, sva @Serialize polja ili sva @Deserialize polja.
+ * 
+ * @author Dusan Eremic
+ */
 class EntityFieldMapper {
 	
+	/** Mapa koja čuva sva polja svih model klasa */
 	private final HashMap<Class<?>, LinkedList<FieldHandler>> fieldHandlerMap;
+	
+	/** Singleton instanca EntityFieldMapper-a */
 	private final static EntityFieldMapper INSTANCE = new EntityFieldMapper();
 	
+	/**
+	 * Private constructor
+	 */
 	private EntityFieldMapper() {
 		
 		fieldHandlerMap = new HashMap<>();
@@ -31,7 +44,8 @@ class EntityFieldMapper {
 			fieldHandlerMap.put(entityClass, fieldListForClass);
 			
 			if (entityClass.getSuperclass() != null) {
-				for (Field field : entityClass.getSuperclass().getDeclaredFields()) {
+				for (Field field : entityClass.getSuperclass()
+						.getDeclaredFields()) {
 					fieldListForClass.add(new FieldHandler(field));
 				}
 			}
@@ -43,30 +57,76 @@ class EntityFieldMapper {
 		}
 	}
 	
-	public <T extends BaseEntity<T>> List<FieldHandler> getAllFields(Class<T> entityClass) {
+	/**
+	 * Vraća sva polja za prosleđenu klasu.
+	 * 
+	 * @param entityClass Klasa tipa T extends BaseEntity<T>.
+	 * @return Sva polja za prosleđenu klasu.
+	 */
+	public <T extends BaseEntity<T>> List<FieldHandler> getAllFields(
+			Class<T> entityClass) {
 		return fieldHandlerMap.get(entityClass);
 	}
 	
-	public <T extends BaseEntity<T>> List<FieldHandler> getSerializableFields(Class<T> entityClass) {
-		return fieldHandlerMap.get(entityClass).stream().filter(handler -> handler.getField().isAnnotationPresent(Serialize.class))
-				.collect(Collectors.toList());
+	/**
+	 * Vraća sva @Serialize polja za prosleđenu klasu.
+	 * 
+	 * @param entityClass Klasa tipa T extends BaseEntity<T>.
+	 * @return Polja prosleđene klase anotirana sa @Serialize.
+	 */
+	public <T extends BaseEntity<T>> List<FieldHandler> getSerializableFields(
+			Class<T> entityClass) {
+		return fieldHandlerMap
+				.get(entityClass)
+				.stream()
+				.filter(handler -> handler.getField().isAnnotationPresent(
+						Serialize.class)).collect(Collectors.toList());
 	}
 	
-	public <T extends BaseEntity<T>> List<FieldHandler> getDeserializableFields(Class<T> entityClass) {
-		return fieldHandlerMap.get(entityClass).stream().filter(handler -> handler.getField().isAnnotationPresent(Deserialize.class))
-				.collect(Collectors.toList());
+	/**
+	 * Vraća sva @Deserialize polja za prosleđenu klasu.
+	 * 
+	 * @param entityClass Klasa tipa T extends BaseEntity<T>.
+	 * @return Polja prosleđene klase anotirana sa @Deserialize.
+	 */
+	public <T extends BaseEntity<T>> List<FieldHandler> getDeserializableFields(
+			Class<T> entityClass) {
+		return fieldHandlerMap
+				.get(entityClass)
+				.stream()
+				.filter(handler -> handler.getField().isAnnotationPresent(
+						Deserialize.class)).collect(Collectors.toList());
 	}
 	
+	/**
+	 * Vraća singleton instancu EntityFieldMapper-a.
+	 */
 	public static EntityFieldMapper get() {
 		return INSTANCE;
 	}
 	
+	/**
+	 * FieldHandler predstavlja wrapper za {@link Field} sa dodatim getValue i
+	 * setValue metodama, kao i uslužnim metodama za proveru tipa.
+	 * 
+	 * @author Dusan Eremic
+	 */
 	public static class FieldHandler {
 		
+		/** Instanca originalnog polja */
 		private final Field field;
+		
+		/** Getter handler */
 		private final MethodHandle getter;
+		
+		/** Setter handler */
 		private final MethodHandle setter;
 		
+		/**
+		 * Constructor
+		 * 
+		 * @param field Instanca originalnog polja.
+		 */
 		public FieldHandler(Field field) {
 			
 			this.field = field;
@@ -80,9 +140,14 @@ class EntityFieldMapper {
 			}
 		}
 		
+		/**
+		 * Vraca instancu originalnog polja.
+		 */
 		public Field getField() {
 			return field;
 		}
+		
+		// ###### Set metoda za proveru tipa wrapp-ovanog polja START
 		
 		public boolean isEntityReference() {
 			return EntityReference.class.isAssignableFrom(field.getType());
@@ -116,6 +181,14 @@ class EntityFieldMapper {
 			return field.getType().isEnum();
 		}
 		
+		// ###### Set metoda za proveru tipa wrapp-ovanog polja END
+		
+		/**
+		 * Getter handler za polje.
+		 * 
+		 * @param entity Instanca kojoj se čita vrednost iz polja.
+		 * @return Object Pročitana vrednost.
+		 */
 		public <T extends BaseEntity<T>> Object getValue(T entity) {
 			try {
 				return this.getter.invoke(entity);
@@ -124,6 +197,12 @@ class EntityFieldMapper {
 			}
 		}
 		
+		/**
+		 * Setter handler za polje
+		 * 
+		 * @param entity Instanca kojoj se setuje vrednost u polje.
+		 * @param value Vrednost koja se setuje.
+		 */
 		public <T extends BaseEntity<T>> void setValue(T entity, Object value) {
 			try {
 				this.setter.invoke(entity, value);

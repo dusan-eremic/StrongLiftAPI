@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2012 Stormpath, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package me.stronglift.api.util;
 
 import java.util.ArrayList;
@@ -20,14 +5,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Simple utility class for working with Strings. Partially copied from the Spring framework and Apache Commons.
- *
- * @author Rod Johnson
- * @author Juergen Hoeller
- * @author Keith Donald
- * @author Rob Harrop
- * @author Rick Evans
- * @author Arjen Poutsma
+ * Simple utility class for working with Strings. Partially copied from the
+ * Spring framework and Apache Commons.
  */
 public class StringUtils {
 	
@@ -36,30 +15,41 @@ public class StringUtils {
 	/**
 	 * Take a String which is a delimited list and convert it to a String array.
 	 * <p>
-	 * A single delimiter can consists of more than one character: It will still be considered as single delimiter string, rather than as bunch of potential
-	 * delimiter characters - in contrast to <code>tokenizeToStringArray</code>.
+	 * A single delimiter can consists of more than one character: It will still
+	 * be considered as single delimiter string, rather than as bunch of
+	 * potential delimiter characters - in contrast to
+	 * <code>tokenizeToStringArray</code>.
 	 * 
 	 * @param str the input String
-	 * @param delimiter the delimiter between elements (this is a single delimiter, rather than a bunch individual delimiter characters)
+	 * @param delimiter the delimiter between elements (this is a single
+	 *            delimiter, rather than a bunch individual delimiter
+	 *            characters)
 	 * @return an array of the tokens in the list
 	 */
-	public static String[] delimitedListToStringArray(String str, String delimiter) {
+	public static String[] delimitedListToStringArray(String str,
+			String delimiter) {
 		return delimitedListToStringArray(str, delimiter, null);
 	}
 	
 	/**
 	 * Take a String which is a delimited list and convert it to a String array.
 	 * <p>
-	 * A single delimiter can consists of more than one character: It will still be considered as single delimiter string, rather than as bunch of potential
-	 * delimiter characters - in contrast to <code>tokenizeToStringArray</code>.
+	 * A single delimiter can consists of more than one character: It will still
+	 * be considered as single delimiter string, rather than as bunch of
+	 * potential delimiter characters - in contrast to
+	 * <code>tokenizeToStringArray</code>.
 	 * 
 	 * @param str the input String
-	 * @param delimiter the delimiter between elements (this is a single delimiter, rather than a bunch individual delimiter characters)
-	 * @param charsToDelete a set of characters to delete. Useful for deleting unwanted line breaks: e.g. "\r\n\f" will delete all new lines and line feeds in a
-	 *            String.
+	 * @param delimiter the delimiter between elements (this is a single
+	 *            delimiter, rather than a bunch individual delimiter
+	 *            characters)
+	 * @param charsToDelete a set of characters to delete. Useful for deleting
+	 *            unwanted line breaks: e.g. "\r\n\f" will delete all new lines
+	 *            and line feeds in a String.
 	 * @return an array of the tokens in the list
 	 */
-	public static String[] delimitedListToStringArray(String str, String delimiter, String charsToDelete) {
+	public static String[] delimitedListToStringArray(String str,
+			String delimiter, String charsToDelete) {
 		if (str == null) {
 			return new String[0];
 		}
@@ -90,7 +80,8 @@ public class StringUtils {
 	 * Delete any character in a given String.
 	 * 
 	 * @param inString the original String
-	 * @param charsToDelete a set of characters to delete. E.g. "az\n" will delete 'a's, 'z's and new lines.
+	 * @param charsToDelete a set of characters to delete. E.g. "az\n" will
+	 *            delete 'a's, 'z's and new lines.
 	 * @return the resulting String
 	 */
 	public static String deleteAny(String inString, String charsToDelete) {
@@ -108,8 +99,9 @@ public class StringUtils {
 	}
 	
 	/**
-	 * Check that the given CharSequence is neither <code>null</code> nor of length 0. Note: Will return <code>true</code> for a CharSequence that purely
-	 * consists of whitespace.
+	 * Check that the given CharSequence is neither <code>null</code> nor of
+	 * length 0. Note: Will return <code>true</code> for a CharSequence that
+	 * purely consists of whitespace.
 	 * <p>
 	 * 
 	 * <pre>
@@ -128,7 +120,8 @@ public class StringUtils {
 	}
 	
 	/**
-	 * Check that the given String is neither <code>null</code> nor of length 0. Note: Will return <code>true</code> for a String that purely consists of
+	 * Check that the given String is neither <code>null</code> nor of length 0.
+	 * Note: Will return <code>true</code> for a String that purely consists of
 	 * whitespace.
 	 * 
 	 * @param str the String to check (may be <code>null</code>)
@@ -140,10 +133,12 @@ public class StringUtils {
 	}
 	
 	/**
-	 * Copy the given Collection into a String array. The Collection must contain String elements only.
+	 * Copy the given Collection into a String array. The Collection must
+	 * contain String elements only.
 	 * 
 	 * @param collection the Collection to copy
-	 * @return the String array (<code>null</code> if the passed-in Collection was <code>null</code>)
+	 * @return the String array (<code>null</code> if the passed-in Collection
+	 *         was <code>null</code>)
 	 */
 	public static String[] toStringArray(Collection<String> collection) {
 		if (collection == null) {
@@ -167,19 +162,23 @@ public class StringUtils {
 		while (sb.length() > 0 && Character.isWhitespace(sb.charAt(0))) {
 			sb.deleteCharAt(0);
 		}
-		while (sb.length() > 0 && Character.isWhitespace(sb.charAt(sb.length() - 1))) {
+		while (sb.length() > 0
+				&& Character.isWhitespace(sb.charAt(sb.length() - 1))) {
 			sb.deleteCharAt(sb.length() - 1);
 		}
 		return sb.toString();
 	}
 	
 	/**
-	 * Split a String at the first occurrence of the delimiter. Does not include the delimiter in the result.
+	 * Split a String at the first occurrence of the delimiter. Does not include
+	 * the delimiter in the result.
 	 * 
 	 * @param toSplit the string to split
 	 * @param delimiter to split the string up with
-	 * @return a two element array with index 0 being before the delimiter, and index 1 being after the delimiter (neither element includes the delimiter); or
-	 *         <code>null</code> if the delimiter wasn't found in the given input String
+	 * @return a two element array with index 0 being before the delimiter, and
+	 *         index 1 being after the delimiter (neither element includes the
+	 *         delimiter); or <code>null</code> if the delimiter wasn't found in
+	 *         the given input String
 	 */
 	public static String[] split(String toSplit, String delimiter) {
 		if (!hasLength(toSplit) || !hasLength(delimiter)) {
@@ -195,8 +194,9 @@ public class StringUtils {
 	}
 	
 	/**
-	 * Check whether the given CharSequence has actual text. More specifically, returns <code>true</code> if the string not <code>null</code>, its length is
-	 * greater than 0, and it contains at least one non-whitespace character.
+	 * Check whether the given CharSequence has actual text. More specifically,
+	 * returns <code>true</code> if the string not <code>null</code>, its length
+	 * is greater than 0, and it contains at least one non-whitespace character.
 	 * <p>
 	 * 
 	 * <pre>
@@ -208,7 +208,9 @@ public class StringUtils {
 	 * </pre>
 	 * 
 	 * @param str the CharSequence to check (may be <code>null</code>)
-	 * @return <code>true</code> if the CharSequence is not <code>null</code>, its length is greater than 0, and it does not contain whitespace only
+	 * @return <code>true</code> if the CharSequence is not <code>null</code>,
+	 *         its length is greater than 0, and it does not contain whitespace
+	 *         only
 	 * @see java.lang.Character#isWhitespace
 	 */
 	public static boolean hasText(CharSequence str) {
@@ -225,11 +227,13 @@ public class StringUtils {
 	}
 	
 	/**
-	 * Check whether the given String has actual text. More specifically, returns <code>true</code> if the string not <code>null</code>, its length is greater
-	 * than 0, and it contains at least one non-whitespace character.
+	 * Check whether the given String has actual text. More specifically,
+	 * returns <code>true</code> if the string not <code>null</code>, its length
+	 * is greater than 0, and it contains at least one non-whitespace character.
 	 * 
 	 * @param str the String to check (may be <code>null</code>)
-	 * @return <code>true</code> if the String is not <code>null</code>, its length is greater than 0, and it does not contain whitespace only
+	 * @return <code>true</code> if the String is not <code>null</code>, its
+	 *         length is greater than 0, and it does not contain whitespace only
 	 * @see #hasText(CharSequence)
 	 */
 	public static boolean hasText(String str) {
@@ -237,16 +241,21 @@ public class StringUtils {
 	}
 	
 	/**
-	 * Returns a 'cleaned' representation of the specified argument. 'Cleaned' is defined as the following:
+	 * Returns a 'cleaned' representation of the specified argument. 'Cleaned'
+	 * is defined as the following:
 	 * <p/>
 	 * <ol>
-	 * <li>If the specified <code>String</code> is <code>null</code>, return <code>null</code></li>
+	 * <li>If the specified <code>String</code> is <code>null</code>, return
+	 * <code>null</code></li>
 	 * <li>If not <code>null</code>, {@link String#trim() trim()} it.</li>
-	 * <li>If the trimmed string is equal to the empty String (i.e. &quot;&quot;), return <code>null</code></li>
-	 * <li>If the trimmed string is not the empty string, return the trimmed version</li>.
+	 * <li>If the trimmed string is equal to the empty String (i.e.
+	 * &quot;&quot;), return <code>null</code></li>
+	 * <li>If the trimmed string is not the empty string, return the trimmed
+	 * version</li>.
 	 * </ol>
 	 * <p/>
-	 * Therefore this method always ensures that any given string has trimmed text, and if it doesn't, <code>null</code> is returned.
+	 * Therefore this method always ensures that any given string has trimmed
+	 * text, and if it doesn't, <code>null</code> is returned.
 	 *
 	 * @param in the input String to clean.
 	 * @return a populated-but-trimmed String or <code>null</code> otherwise

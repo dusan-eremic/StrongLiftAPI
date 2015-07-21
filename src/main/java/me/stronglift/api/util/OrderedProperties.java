@@ -10,10 +10,8 @@ import java.util.Scanner;
 import java.util.Set;
 
 /**
- * Replacement for the java.util.Properties class that retains the order in which the properties are defined.
- * 
- * @author Dusan Eremic TODO - complete JavaDoc
- *
+ * Replacement for the java.util.Properties class that retains the order in
+ * which the properties are defined.
  */
 public class OrderedProperties implements Map<String, String> {
 	
@@ -31,16 +29,18 @@ public class OrderedProperties implements Map<String, String> {
 	}
 	
 	/**
-	 * Loads the .properties backed by the given InputStream into this instance. This implementation will close the input stream after it has finished loading.
-	 * It is expected that the stream's contents are UTF-8 encoded.
+	 * Loads the .properties backed by the given InputStream into this instance.
+	 * This implementation will close the input stream after it has finished
+	 * loading. It is expected that the stream's contents are UTF-8 encoded.
 	 *
-	 * @param is the {@code InputStream} from which to read the INI-formatted text
+	 * @param is the {@code InputStream} from which to read the INI-formatted
+	 *            text
 	 */
 	public void load(InputStream is) {
-		// convert InputStream into a String in one shot:
 		String string;
 		try {
-			string = new Scanner(is, DEFAULT_CHARSET_NAME).useDelimiter("\\A").next();
+			string = new Scanner(is, DEFAULT_CHARSET_NAME).useDelimiter("\\A")
+					.next();
 		} catch (NoSuchElementException nsee) {
 			string = "";
 		} finally {
@@ -59,8 +59,10 @@ public class OrderedProperties implements Map<String, String> {
 			return false;
 		}
 		int length = line.length();
-		// find the number of backslashes at the end of the line. If an even number, the
-		// backslashes are considered escaped. If an odd number, the line is considered continued on the next line
+		// find the number of backslashes at the end of the line. If an even
+		// number, the
+		// backslashes are considered escaped. If an odd number, the line is
+		// considered continued on the next line
 		int backslashCount = 0;
 		for (int i = length - 1; i > 0; i--) {
 			if (line.charAt(i) == ESCAPE_TOKEN) {
@@ -100,8 +102,10 @@ public class OrderedProperties implements Map<String, String> {
 					keyBuffer.append(c);
 				}
 			} else {
-				if (valueBuffer.length() == 0 && isKeyValueSeparatorChar(c) && !isCharEscaped(line, i)) {
-					// swallow the separator chars before we start building the value
+				if (valueBuffer.length() == 0 && isKeyValueSeparatorChar(c)
+						&& !isCharEscaped(line, i)) {
+					// swallow the separator chars before we start building the
+					// value
 				} else {
 					valueBuffer.append(c);
 				}
@@ -130,7 +134,8 @@ public class OrderedProperties implements Map<String, String> {
 			
 			line = StringUtils.clean(scanner.nextLine());
 			
-			if (line == null || line.startsWith(COMMENT_POUND) || line.startsWith(COMMENT_SEMICOLON)) {
+			if (line == null || line.startsWith(COMMENT_POUND)
+					|| line.startsWith(COMMENT_SEMICOLON)) {
 				// skip empty lines and comments:
 				continue;
 			}

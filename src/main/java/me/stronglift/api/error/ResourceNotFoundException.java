@@ -5,17 +5,25 @@ import javax.ws.rs.NotFoundException;
 import me.stronglift.api.model.BaseEntity;
 
 /**
- * This exception shoud be thrown when a resource with specified ID is not found.
+ * Ovaj exception će biti bačen kada traženi resurs ne postoji.
  * 
- * @author Dusan Eremic TODO - complete JavaDoc
+ * @author Dusan Eremic
  *
  */
 public class ResourceNotFoundException extends NotFoundException {
 	
 	private static final long serialVersionUID = 1L;
 	
-	public <T extends BaseEntity<T>> ResourceNotFoundException(Class<T> resourceClass, String invalidId) {
-		super(String.format("%s for id '%s' cannot be found.", resourceClass.getSimpleName(), invalidId));
+	/**
+	 * Constructor
+	 * 
+	 * @param resourceClass Tip resursa.
+	 * @param invalidId ID ressura koji nije pronađen.
+	 **/
+	public <T extends BaseEntity<T>> ResourceNotFoundException(
+			Class<T> resourceClass, String invalidId) {
+		super(String.format("%s for id '%s' cannot be found.",
+				resourceClass.getSimpleName(), invalidId));
 	}
 	
 }

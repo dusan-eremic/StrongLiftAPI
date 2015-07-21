@@ -20,7 +20,7 @@ import me.stronglift.api.error.UserAlreadyExistsException;
 import me.stronglift.api.model.User;
 
 /**
- * User resource
+ * User resource controller
  * 
  * @author Dusan Eremic
  *
@@ -28,15 +28,23 @@ import me.stronglift.api.model.User;
 @Path(ResourceMapper.Path.USER)
 public class UserController extends BaseController {
 	
+	/**
+	 * Handler za registraciju novog korisnika.
+	 */
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response register(Resource<User> entityRequest) throws UserAlreadyExistsException, URISyntaxException {
+	public Response register(Resource<User> entityRequest)
+			throws UserAlreadyExistsException, URISyntaxException {
 		User user = entityRequest.toEntity(uriInfo, User.class);
-		user = serviceFactory.getUserService().register(user.getUsername(), user.getPassword());
+		user = serviceFactory.getUserService().register(user.getUsername(),
+				user.getPassword());
 		return Response.created(new URI("https://www.facebook.com/")).build();
 	}
 	
+	/**
+	 * Handler koji vraća jednog korisnika po ID-ju.
+	 */
 	@Path("/{id}")
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)

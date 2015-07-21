@@ -7,25 +7,49 @@ import me.stronglift.api.util.HttpStatus;
 import me.stronglift.api.util.ObjectUtils;
 
 /**
- * A class that encaptualtes all API errors.
+ * Klasa ApiError enkapsulira sve API greške.
  * 
- * @author Dusan Eremic TODO - complete JavaDoc
+ * @author Dusan Eremic
  *
  */
 public class ApiError {
 	
+	/** Email za više informacija */
 	private static final String DEFAULT_MORE_INFO_URL = "mailto:api@stronglift.me";
 	
+	/** Http status code */
 	private final HttpStatus status;
+	
+	/** Interni API error code */
 	private final int code;
+	
+	/** Poruka o grešci za korisnika */
 	private final String message;
+	
+	/** Poruka o grešci za programera */
 	private final String developerMessage;
+	
+	/** Email/URL za više informacija */
 	private final String moreInfoUrl;
+	
+	/** Instanca izuzetka koji se desio */
 	private final Throwable throwable;
 	
-	private ApiError(HttpStatus status, int code, String message, String developerMessage, String moreInfoUrl, Throwable throwable) {
+	/**
+	 * Constructor
+	 * 
+	 * @param status Http status code
+	 * @param code Interni API error code
+	 * @param message Poruka o grešci za korisnika
+	 * @param developerMessage Poruka o grešci za programera
+	 * @param moreInfoUrl Email/URL za više informacija
+	 * @param throwable Instanca izuzetka koji se desio
+	 */
+	private ApiError(HttpStatus status, int code, String message,
+			String developerMessage, String moreInfoUrl, Throwable throwable) {
 		if (status == null) {
-			throw new NullPointerException("HttpStatus argument cannot be null.");
+			throw new NullPointerException(
+					"HttpStatus argument cannot be null.");
 		}
 		this.status = status;
 		this.code = code;
@@ -35,39 +59,7 @@ public class ApiError {
 		this.throwable = throwable;
 	}
 	
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o instanceof ApiError) {
-			ApiError re = (ApiError) o;
-			return ObjectUtils.nullSafeEquals(getHttpStatus(), re.getHttpStatus()) && ObjectUtils.nullSafeEquals(getCode(), re.getCode())
-					&& ObjectUtils.nullSafeEquals(getMessage(), re.getMessage()) && ObjectUtils.nullSafeEquals(getDeveloperMessage(), re.getDeveloperMessage())
-					&& ObjectUtils.nullSafeEquals(getMoreInfoUrl(), re.getMoreInfoUrl()) && ObjectUtils.nullSafeEquals(getThrowable(), re.getThrowable());
-			
-		}
-		return false;
-	}
-	
-	@Override
-	public int hashCode() {
-		return ObjectUtils.nullSafeHashCode(getHttpStatus(), getCode(), getMessage(), getDeveloperMessage(), getMoreInfoUrl(), getThrowable());
-	}
-	
-	public String toString() {
-		return append(new StringBuilder(), getHttpStatus()).append(", message: ").append(getMessage()).toString();
-	}
-	
-	private StringBuilder append(StringBuilder sb, HttpStatus status) {
-		sb.append(status.getCode()).append(" (").append(status.getReason()).append(")");
-		return sb;
-	}
-	
-	private String toString(HttpStatus status) {
-		return append(new StringBuilder(), status).toString();
-	}
-	
+	// ###### GET methods START
 	public HttpStatus getHttpStatus() {
 		return status;
 	}
@@ -92,10 +84,58 @@ public class ApiError {
 		return throwable;
 	}
 	
+	// ###### GET methods END
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o instanceof ApiError) {
+			ApiError re = (ApiError) o;
+			return ObjectUtils.nullSafeEquals(getHttpStatus(),
+					re.getHttpStatus())
+					&& ObjectUtils.nullSafeEquals(getCode(), re.getCode())
+					&& ObjectUtils
+							.nullSafeEquals(getMessage(), re.getMessage())
+					&& ObjectUtils.nullSafeEquals(getDeveloperMessage(),
+							re.getDeveloperMessage())
+					&& ObjectUtils.nullSafeEquals(getMoreInfoUrl(),
+							re.getMoreInfoUrl())
+					&& ObjectUtils.nullSafeEquals(getThrowable(),
+							re.getThrowable());
+			
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return ObjectUtils.nullSafeHashCode(getHttpStatus(), getCode(),
+				getMessage(), getDeveloperMessage(), getMoreInfoUrl(),
+				getThrowable());
+	}
+	
+	private StringBuilder append(StringBuilder sb, HttpStatus status) {
+		sb.append(status.getCode()).append(" (").append(status.getReason())
+				.append(")");
+		return sb;
+	}
+	
+	private String toString(HttpStatus status) {
+		return append(new StringBuilder(), status).toString();
+	}
+	
+	public String toString() {
+		return append(new StringBuilder(), getHttpStatus())
+				.append(", message: ").append(getMessage()).toString();
+	}
+	
 	/**
-	 * {@link ApiError} to {@link Map} of values.
+	 * Konvertuje {@link ApiError} u mapu koja se može poslati kao HTTP
+	 * response.
 	 * 
-	 * @return
+	 * @return API error kao {@link Map}.
 	 */
 	public Map<String, ?> toMap() {
 		final Map<String, Object> map = new LinkedHashMap<>();
@@ -124,7 +164,8 @@ public class ApiError {
 			developerMessage = toString(getHttpStatus());
 			
 			if (getThrowable() != null) {
-				developerMessage = developerMessage + ": " + getThrowable().getMessage();
+				developerMessage = developerMessage + ": "
+						+ getThrowable().getMessage();
 			}
 		}
 		map.put("developerErrorMessage", developerMessage);
@@ -139,6 +180,9 @@ public class ApiError {
 		return map;
 	}
 	
+	/**
+	 * Builder za {@link ApiError}.
+	 */
 	public static class Builder {
 		
 		private HttpStatus httpStatus;
@@ -187,7 +231,8 @@ public class ApiError {
 		}
 		
 		public ApiError build() {
-			return new ApiError(this.httpStatus, this.errorCode, this.message, this.developerMessage, this.moreInfoUrl, this.throwable);
+			return new ApiError(this.httpStatus, this.errorCode, this.message,
+					this.developerMessage, this.moreInfoUrl, this.throwable);
 		}
 	}
 }

@@ -1,23 +1,65 @@
 package me.stronglift.api.util;
 
 import java.io.InputStream;
-import java.lang.reflect.Constructor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Utility methods for classes.
- * 
- * @author Dusan Eremic TODO - complete JavaDoc
  */
-@SuppressWarnings("rawtypes") 
+@SuppressWarnings("rawtypes")
 public class ClassUtils {
 	
-	/**
-	 * Private internal log instance.
-	 */
 	private static final Logger log = LoggerFactory.getLogger(ClassUtils.class);
+	
+	/**
+	 * Returns the specified resource by checking the current thread's
+	 * {@link Thread#getContextClassLoader() context class loader}, then the
+	 * current ClassLoader (<code>ClassUtils.class.getClassLoader()</code>),
+	 * then the system/application ClassLoader (
+	 * <code>ClassLoader.getSystemClassLoader()</code>, in that order, using
+	 * {@link ClassLoader#getResourceAsStream(String) getResourceAsStream(name)}
+	 * .
+	 *
+	 * @param name the name of the resource to acquire from the classloader(s).
+	 * @return the InputStream of the resource found, or <code>null</code> if
+	 *         the resource cannot be found from any of the three mentioned
+	 *         ClassLoaders.
+	 */
+	public static InputStream getResourceAsStream(String name) {
+		
+		InputStream is = THREAD_CL_ACCESSOR.getResourceStream(name);
+		
+		if (is == null) {
+			if (log.isTraceEnabled()) {
+				log.trace("Resource ["
+						+ name
+						+ "] was not found via the thread context ClassLoader.  Trying the "
+						+ "current ClassLoader...");
+			}
+			is = CLASS_CL_ACCESSOR.getResourceStream(name);
+		}
+		
+		if (is == null) {
+			if (log.isTraceEnabled()) {
+				log.trace("Resource ["
+						+ name
+						+ "] was not found via the current class loader.  Trying the "
+						+ "system/application ClassLoader...");
+			}
+			is = SYSTEM_CL_ACCESSOR.getResourceStream(name);
+		}
+		
+		if (is == null && log.isTraceEnabled()) {
+			log.trace("Resource ["
+					+ name
+					+ "] was not found via the thread context, current, or "
+					+ "system/application ClassLoaders.  All heuristics have been exhausted.  Returning null.");
+		}
+		
+		return is;
+	}
 	
 	private static final ClassLoaderAccessor THREAD_CL_ACCESSOR = new ExceptionIgnoringAccessor() {
 		@Override
@@ -40,140 +82,14 @@ public class ClassUtils {
 		}
 	};
 	
-	/**
-	 * Returns the specified resource by checking the current thread's {@link Thread#getContextClassLoader() context class loader}, then the current ClassLoader
-	 * (<code>ClassUtils.class.getClassLoader()</code>), then the system/application ClassLoader (<code>ClassLoader.getSystemClassLoader()</code>, in that
-	 * order, using {@link ClassLoader#getResourceAsStream(String) getResourceAsStream(name)}.
-	 *
-	 * @param name the name of the resource to acquire from the classloader(s).
-	 * @return the InputStream of the resource found, or <code>null</code> if the resource cannot be found from any of the three mentioned ClassLoaders.
-	 */
-	public static InputStream getResourceAsStream(String name) {
-		
-		InputStream is = THREAD_CL_ACCESSOR.getResourceStream(name);
-		
-		if (is == null) {
-			if (log.isTraceEnabled()) {
-				log.trace("Resource [" + name + "] was not found via the thread context ClassLoader.  Trying the " + "current ClassLoader...");
-			}
-			is = CLASS_CL_ACCESSOR.getResourceStream(name);
-		}
-		
-		if (is == null) {
-			if (log.isTraceEnabled()) {
-				log.trace("Resource [" + name + "] was not found via the current class loader.  Trying the " + "system/application ClassLoader...");
-			}
-			is = SYSTEM_CL_ACCESSOR.getResourceStream(name);
-		}
-		
-		if (is == null && log.isTraceEnabled()) {
-			log.trace("Resource [" + name + "] was not found via the thread context, current, or "
-					+ "system/application ClassLoaders.  All heuristics have been exhausted.  Returning null.");
-		}
-		
-		return is;
-	}
-	
-	/**
-	 * Attempts to load the specified class name from the current thread's {@link Thread#getContextClassLoader() context class loader}, then the current
-	 * ClassLoader (<code>ClassUtils.class.getClassLoader()</code>), then the system/application ClassLoader (<code>ClassLoader.getSystemClassLoader()</code>,
-	 * in that order. If any of them cannot locate the specified class, an <code>UnknownClassException</code> is thrown (our RuntimeException equivalent of the
-	 * JRE's <code>ClassNotFoundException</code>.
-	 *
-	 * @param fqcn the fully qualified class name to load
-	 * @return the located class
-	 */
-	public static Class forName(String fqcn) throws RuntimeException {
-		
-		Class clazz = THREAD_CL_ACCESSOR.loadClass(fqcn);
-		
-		if (clazz == null) {
-			if (log.isTraceEnabled()) {
-				log.trace("Unable to load class named [" + fqcn + "] from the thread context ClassLoader.  Trying the current ClassLoader...");
-			}
-			clazz = CLASS_CL_ACCESSOR.loadClass(fqcn);
-		}
-		
-		if (clazz == null) {
-			if (log.isTraceEnabled()) {
-				log.trace("Unable to load class named [" + fqcn + "] from the current ClassLoader.  " + "Trying the system/application ClassLoader...");
-			}
-			clazz = SYSTEM_CL_ACCESSOR.loadClass(fqcn);
-		}
-		
-		if (clazz == null) {
-			String msg = "Unable to load class named [" + fqcn + "] from the thread context, current, or "
-					+ "system/application ClassLoaders.  All heuristics have been exhausted.  Class could not be found.";
-			throw new RuntimeException(msg);
-		}
-		
-		return clazz;
-	}
-	
-	public static boolean isAvailable(String fullyQualifiedClassName) {
-		try {
-			forName(fullyQualifiedClassName);
-			return true;
-		} catch (RuntimeException e) {
-			return false;
-		}
-	}
-	
-	public static Object newInstance(String fqcn) {
-		return newInstance(forName(fqcn));
-	}
-	
-	public static Object newInstance(String fqcn, Object... args) {
-		return newInstance(forName(fqcn), args);
-	}
-	
-	public static Object newInstance(Class clazz) {
-		if (clazz == null) {
-			String msg = "Class method parameter cannot be null.";
-			throw new IllegalArgumentException(msg);
-		}
-		try {
-			return clazz.newInstance();
-		} catch (Exception e) {
-			throw new RuntimeException("Unable to instantiate class [" + clazz.getName() + "]", e);
-		}
-	}
-	
-	public static Object newInstance(Class clazz, Object... args) {
-		Class[] argTypes = new Class[args.length];
-		for (int i = 0; i < args.length; i++) {
-			argTypes[i] = args[i].getClass();
-		}
-		Constructor ctor = getConstructor(clazz, argTypes);
-		return instantiate(ctor, args);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public static Constructor getConstructor(Class clazz, Class... argTypes) {
-		try {
-			return clazz.getConstructor(argTypes);
-		} catch (NoSuchMethodException e) {
-			throw new IllegalStateException(e);
-		}
-		
-	}
-	
-	public static Object instantiate(Constructor ctor, Object... args) {
-		try {
-			return ctor.newInstance(args);
-		} catch (Exception e) {
-			String msg = "Unable to instantiate Permission instance with constructor [" + ctor + "]";
-			throw new RuntimeException(msg, e);
-		}
-	}
-	
 	private static interface ClassLoaderAccessor {
 		Class loadClass(String fqcn);
 		
 		InputStream getResourceStream(String name);
 	}
 	
-	private static abstract class ExceptionIgnoringAccessor implements ClassLoaderAccessor {
+	private static abstract class ExceptionIgnoringAccessor implements
+			ClassLoaderAccessor {
 		
 		public Class loadClass(String fqcn) {
 			Class clazz = null;
@@ -183,7 +99,8 @@ public class ClassUtils {
 					clazz = cl.loadClass(fqcn);
 				} catch (ClassNotFoundException e) {
 					if (log.isTraceEnabled()) {
-						log.trace("Unable to load clazz named [" + fqcn + "] from class loader [" + cl + "]");
+						log.trace("Unable to load clazz named [" + fqcn
+								+ "] from class loader [" + cl + "]");
 					}
 				}
 			}

@@ -1,12 +1,9 @@
 package me.stronglift.api.controller.resource;
 
-import java.net.URI;
 import java.util.LinkedHashMap;
 
-import me.stronglift.api.controller.resource.ResourceLink.LinkType;
-
 /**
- * Meta data for a resource - TODO JavaDoc
+ * Meta podaci sa resurs. Ovo je osnovna klasa za {@link Resource} klasu.
  * 
  * @author Dušan Eremić
  *
@@ -15,38 +12,35 @@ public class ResourceMeta extends LinkedHashMap<String, Object> {
 	
 	private static final long serialVersionUID = 4699384935569512738L;
 	protected static final String PATH_SEPARATOR = "/";
+	
+	// JSON tagovi za meta data sekciju resursa
 	private static final String metaTag = "meta";
 	protected static final String hrefTag = "href";
 	private static final String typeTag = "type";
 	protected static final String lookupIdTag = "id";
 	
+	/**
+	 * Constructor #01
+	 */
 	protected ResourceMeta() {
 		put(metaTag, new LinkedHashMap<String, Object>());
 	}
 	
+	/**
+	 * Constructor #02
+	 * 
+	 * @param link {@link ResourceLink}
+	 */
+	@SuppressWarnings("unchecked")
 	protected ResourceMeta(final ResourceLink link) {
 		this();
 		if (link != null) {
-			addToMeta(hrefTag, link.getUri());
-			addToMeta(typeTag, link.getType());
+			((LinkedHashMap<String, Object>) get(metaTag)).put(hrefTag,
+					link.getUri());
+			((LinkedHashMap<String, Object>) get(metaTag)).put(typeTag,
+					link.getType());
 		} else {
 			remove(metaTag);
 		}
 	}
-	
-	@SuppressWarnings("unchecked")
-	private void addToMeta(String fieldName, Object value) {
-		((LinkedHashMap<String, Object>) get(metaTag)).put(fieldName, value);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public URI getHref() {
-		return (URI) ((LinkedHashMap<String, Object>) get(metaTag)).get(hrefTag);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public LinkType getLinkType() {
-		return (LinkType) ((LinkedHashMap<String, Object>) get(metaTag)).get(typeTag);
-	}
-	
 }

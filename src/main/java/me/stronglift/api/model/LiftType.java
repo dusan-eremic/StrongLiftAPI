@@ -1,7 +1,9 @@
 package me.stronglift.api.model;
 
 /**
- * Created by Dusan Eremic.
+ * Powerlifting vežbe
+ * 
+ * @author Dusan Eremic
  */
 public enum LiftType {
 	

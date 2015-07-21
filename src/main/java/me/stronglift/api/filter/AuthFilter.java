@@ -22,29 +22,34 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Auth filter for Jersey that filters every request coming into the API.
+ * Jersey filter za svaki dolaće request.
  * 
- * @author Dušan Eremić TODO - complete JavaDoc
+ * Koristi se za Basic autentikaciju.
+ * 
+ * @author Dušan Eremić
  *
  */
 @Provider
 @PreMatching
 public class AuthFilter implements ContainerRequestFilter,
 		ContainerResponseFilter {
-
+	
+	/** Auth header */
 	private static final String AUTHORIZATION = "Authorization";
-
+	
+	/** Auth basic */
 	private static final String BASIC = "Basic";
-
+	
+	/** Instanca service factory-ja */
 	@Context
 	private ServiceFactory serviceFactory;
-
+	
+	/** Logger */
 	private static final Logger logger = LoggerFactory
 			.getLogger(AuthFilter.class);
-
+	
 	/**
-	 * Filter method called after a response has been provided for a request
-	 * (either by a request filter or by a matched resource method).
+	 * Metoda dodaje Access-Control header-e u response i loguje response.
 	 */
 	@Override
 	public void filter(ContainerRequestContext requestContext,
@@ -60,9 +65,11 @@ public class AuthFilter implements ContainerRequestFilter,
 		Object entity = responseContext.getEntity();
 		logger.debug("Response (status {}), Entity: {}", httpStatus, entity);
 	}
-
+	
 	/**
-	 * Filter method called before a request has been dispatched to a resource.
+	 * Metoda filtira SVE dolazeće requestove i vrši basic autentikaciju
+	 * korisnika. Jedini request koji se ne autentifikuje je registracija novog
+	 * korisnika.
 	 */
 	@Override
 	public void filter(ContainerRequestContext requestContext)
@@ -70,7 +77,7 @@ public class AuthFilter implements ContainerRequestFilter,
 		
 		logger.debug("Requesting {} method for path {}", requestContext
 				.getMethod(), requestContext.getUriInfo().getRequestUri());
-
+		
 		if ((HttpMethod.POST.equals(requestContext.getMethod()) || HttpMethod.OPTIONS
 				.equals(requestContext.getMethod()))
 				&& Resource.trimPath(requestContext.getUriInfo().getPath())
@@ -78,58 +85,65 @@ public class AuthFilter implements ContainerRequestFilter,
 			logger.debug("Registration request - no authorization is required.");
 			return;
 		}
-
+		
 		String[] usernamePassword = decodeAuthorization(requestContext
 				.getHeaderString(AUTHORIZATION));
-
+		
 		if (usernamePassword == null) {
 			throw new NotAuthorizedException(
 					"Basic Authorization is missing or invalid.", BASIC);
 		}
-
+		
 		final User user = serviceFactory.getUserService().checkUser(
 				usernamePassword[0], usernamePassword[1]);
-
+		
 		if (user == null) {
 			throw new NotAuthorizedException(
 					"Provided user credentials are not valid.", BASIC);
 		} else {
 			requestContext.setProperty(BaseController.USER, user);
 		}
-
+		
 	}
-
+	
+	/**
+	 * Metoda vraća dekodirani Auth Basic header ili null ukoliko header nije
+	 * ispravan.
+	 * 
+	 * @param authorization Base64 enkodirani username:passwrod
+	 * @return Niz koji sadrži dekodirani username i password.
+	 */
 	private static String[] decodeAuthorization(String authorization) {
 		if (authorization == null || !authorization.startsWith(BASIC)) {
 			return null;
 		}
-
+		
 		// Authorization: Basic base64credentials
 		String base64Credentials = authorization.substring(BASIC.length())
 				.trim();
 		if (base64Credentials.isEmpty()) {
 			return null;
 		}
-
+		
 		// credentials = username:password
 		String credentials = new String(java.util.Base64.getDecoder().decode(
 				base64Credentials));
-
+		
 		// credentials split
 		final String[] usernamePassword = credentials.split(":", 2);
-
+		
 		if (usernamePassword.length != 2) {
 			return null;
 		}
-
+		
 		if (usernamePassword[0].trim().isEmpty()) {
 			return null;
 		}
-
+		
 		if (usernamePassword[1].trim().isEmpty()) {
 			return null;
 		}
-
+		
 		return usernamePassword;
 	}
 }
