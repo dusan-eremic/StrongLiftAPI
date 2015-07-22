@@ -5,10 +5,10 @@ HOST: http://api.stronglift.me/
 
 
 # Group Lifts
-Lift resursi Strong Lift API-ja
-Svi request-ovi moraju biti autentifikovani.
+Lift resursi Strong Lift API-ja. 
 
 ## Lift collection [/lifts]
+
 ### Get all Lifts [GET]
 
 + Request (application/json)
@@ -106,7 +106,18 @@ Svi request-ovi moraju biti autentifikovani.
                 "time": "2015-07-11T10:15:30.100Z"
             }
             
++ Response 400 (application/json)
+
+        {
+          "httpStatusCode": 400,
+          "errorCode": 400,
+          "errorMessage": "Time to at least the seconds field is required in the format 2007-12-03T10:15:30.000Z",
+          "developerErrorMessage": "[Field: time]Passed date '2015-07-11T10:15:30.100Zs' is not parsable UTC time format. Time to at least the seconds field is required in the format 2007-12-03T10:15:30.000Z",
+          "moreInfo": "mailto:api@stronglift.me"
+        }
+            
 ## Lift [/lifts/{liftId}]
+
 ### Get a single lift [GET]
 
 + Parameters
@@ -271,8 +282,7 @@ Svi request-ovi moraju biti autentifikovani.
             }
             
 # Group Users
-User resursi Strong Lift API-ja
-Svi request-ovi moraju biti autentifikovani.
+User resursi Strong Lift API-ja.
 
 ## Users collection [/users]
 ### Register a new user [POST]
@@ -321,4 +331,28 @@ Svi request-ovi moraju biti autentifikovani.
                   "type": "collection"
                 }
               }
+            }
+            
++ Response 404 (application/json)
+
+    + Body
+    
+            {
+              "httpStatusCode": 404,
+              "errorCode": 404,
+              "errorMessage": "User for id 'c60dc71ae2344f8092ae563247ac7001a' cannot be found.",
+              "developerErrorMessage": "User for id 'c60dc71ae2344f8092ae563247ac7001a' cannot be found.",
+              "moreInfo": "mailto:api@stronglift.me"
+            }
+
++ Response 401 (application/json)
+
+    + Body
+    
+            {
+              "httpStatusCode": 401,
+              "errorCode": 401,
+              "errorMessage": "Basic Authorization is missing or invalid.",
+              "developerErrorMessage": "Basic Authorization is missing or invalid.",
+              "moreInfo": "mailto:api@stronglift.me"
             }
