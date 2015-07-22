@@ -1,6 +1,5 @@
 package me.stronglift.api.controller;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 
 import javax.ws.rs.Consumes;
@@ -39,7 +38,7 @@ public class UserController extends BaseController {
 		User user = entityRequest.toEntity(uriInfo, User.class);
 		user = serviceFactory.getUserService().register(user.getUsername(),
 				user.getPassword());
-		return Response.created(new URI("https://www.facebook.com/")).build();
+		return Response.created(null).build();
 	}
 	
 	/**
