@@ -1,0 +1,324 @@
+FORMAT: 1A
+HOST: http://api.stronglift.me/
+
+# Strong Lift API
+
+
+# Group Lifts
+Lift resursi Strong Lift API-ja
+Svi request-ovi moraju biti autentifikovani.
+
+## Lift collection [/lifts]
+### Get all Lifts [GET]
+
++ Request (application/json)
+
+    + Header
+    
+            Authorization: Basic ZHVzYW46dGVzdA==
+    
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "meta": {
+                    "href": "http://api.stronglift.me/lifts",
+                    "type": "self"
+                },
+                "items": [
+                    {
+                        "meta": {
+                            "href": "http://api.stronglift.me/lifts/325674f37eb84f54a70fb22332a8bb76",
+                            "type": "instance"
+                        },
+                        "id": "325674f37eb84f54a70fb22332a8bb76",
+                        "owner": {
+                            "meta": {
+                                "href": "http://api.stronglift.me/users/856ce3f4e7e343078ad18e345de3a6e1",
+                                "type": "instance"
+                            }
+                        },
+                        "liftType": "BENCH",
+                        "repetition": 3,
+                        "weight": "120.00",
+                        "time": "2015-07-11T10:15:30.100Z"
+                    },
+                    {
+                        "meta": {
+                            "href": "http://api.stronglift.me/lifts/7754126ab0d949338e3b5e5dfc67d56c",
+                            "type": "instance"
+                        },
+                        "id": "7754126ab0d949338e3b5e5dfc67d56c",
+                        "owner": {
+                            "meta": {
+                                "href": "http://api.stronglift.me/users/856ce3f4e7e343078ad18e345de3a6e1",
+                                "type": "instance"
+                            }
+                        },
+                        "liftType": "SQUAT",
+                        "repetition": 8,
+                        "weight": "140.00",
+                        "time": "2015-07-10T10:15:30.100Z"
+                    }
+                ]
+            }
+            
+### Create a new Lift [POST]
+
++ Request (application/json)
+
+    + Header
+    
+            Authorization: Basic ZHVzYW46dGVzdA==
+    
+    + Body
+
+            {
+              "liftType": "BENCH",
+              "repetition": "3",
+              "weight": "120",
+              "time" : "2015-07-11T10:15:30.100Z"
+            }
+        
++ Response 201 (application/json)
+
+    + Header
+    
+            Location : http://api.stronglift.me/lifts/8754d653f0fd45de9fbd429272c0db5d
+    + Body
+    
+            {
+                "meta": {
+                    "href": "http://api.stronglift.me/lifts/8754d653f0fd45de9fbd429272c0db5d",
+                    "type": "self"
+                },
+                "id": "8754d653f0fd45de9fbd429272c0db5d",
+                "owner": {
+                    "meta": {
+                        "href": "http://api.stronglift.me/users/856ce3f4e7e343078ad18e345de3a6e1",
+                        "type": "instance"
+                    }
+                },
+                "liftType": "BENCH",
+                "repetition": 3,
+                "weight": "120.00",
+                "time": "2015-07-11T10:15:30.100Z"
+            }
+            
+## Lift [/lifts/{liftId}]
+### Get a single lift [GET]
+
++ Parameters
+    + liftId: 8754d653f0fd45de9fbd429272c0db5d (required, string) - The id of the Lift to retrieve.
+
++ Request (application/json)
+
+    + Header
+    
+            Authorization: Basic ZHVzYW46dGVzdA==
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+              "meta": {
+                "href": "http://api.stronglift.me/lifts/8754d653f0fd45de9fbd429272c0db5d",
+                "type": "instance"
+              },
+              "id": "8754d653f0fd45de9fbd429272c0db5d",
+              "owner": {
+                "meta": {
+                  "href": "http://api.stronglift.me/users/856ce3f4e7e343078ad18e345de3a6e1",
+                  "type": "instance"
+                }
+              },
+              "liftType": "BENCH",
+              "repetition": 3,
+              "weight": "120.00",
+              "time": "2015-07-11T10:15:30.100Z"
+            }
+
+### Update a Lift [POST]
+
++ Parameters
+     + liftId: 8754d653f0fd45de9fbd429272c0db5d (required, string) - The id of the Lift to be updated.
+    
++ Request (application/json)
+
+    + Header
+    
+            Authorization: Basic ZHVzYW46dGVzdA==
+    
+    + Body
+
+            {
+              "liftType": "DEADLIFT",
+              "repetition": "10",
+              "weight": "120",
+              "time" : "2015-07-11T10:15:30.100Z"
+            }
+
+        
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+              "meta": {
+                "href": "http://api.stronglift.me/lifts/8754d653f0fd45de9fbd429272c0db5d",
+                "type": "self"
+              },
+              "id": "8754d653f0fd45de9fbd429272c0db5d",
+              "owner": {
+                "meta": {
+                  "href": "http://api.stronglift.me/users/856ce3f4e7e343078ad18e345de3a6e1",
+                  "type": "instance"
+                }
+              },
+              "liftType": "DEADLIFT",
+              "repetition": 10,
+              "weight": "120.00",
+              "time": "2015-07-11T10:15:30.100Z"
+            }
+            
+### Delete a single lift [DELETE]
+
++ Parameters
+    + liftId: 8754d653f0fd45de9fbd429272c0db5d (required, string) - The id of the Lift to be deleted.
+
++ Request (application/json)
+
+    + Header
+    
+            Authorization: Basic ZHVzYW46dGVzdA==
+
++ Response 200 (application/json)
+
+            
+## Lift records collection [/lifts/records]
+### Get list of Lift records [GET]
+
++ Request (application/json)
+
+    + Header
+    
+            Authorization: Basic ZHVzYW46dGVzdA==
+    
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "meta": {
+                    "href": "http://api.stronglift.me/lifts/records",
+                    "type": "self"
+                },
+                "items": [
+                    {
+                        "meta": {
+                            "href": "http://api.stronglift.me/lifts/325674f37eb84f54a70fb22332a8bb76",
+                            "type": "instance"
+                        },
+                        "id": "325674f37eb84f54a70fb22332a8bb76",
+                        "owner": {
+                            "meta": {
+                                "href": "http://api.stronglift.me/users/856ce3f4e7e343078ad18e345de3a6e1",
+                                "type": "instance"
+                            }
+                        },
+                        "liftType": "BENCH",
+                        "repetition": 3,
+                        "weight": "120.00",
+                        "time": "2015-07-11T10:15:30.100Z"
+                    },
+                    {
+                        "meta": {
+                            "href": "http://api.stronglift.me/lifts/7754126ab0d949338e3b5e5dfc67d56c",
+                            "type": "instance"
+                        },
+                        "id": "7754126ab0d949338e3b5e5dfc67d56c",
+                        "owner": {
+                            "meta": {
+                                "href": "http://api.stronglift.me/users/856ce3f4e7e343078ad18e345de3a6e1",
+                                "type": "instance"
+                            }
+                        },
+                        "liftType": "SQUAT",
+                        "repetition": 8,
+                        "weight": "140.00",
+                        "time": "2015-07-10T10:15:30.100Z"
+                    },
+                    {
+                        "meta": {
+                            "href": "http://api.stronglift.me/lifts/8754d653f0fd45de9fbd429272c0db5d",
+                            "type": "instance"
+                        },
+                        "id": "8754d653f0fd45de9fbd429272c0db5d",
+                        "owner": {
+                            "meta": {
+                                "href": "http://api.stronglift.me/users/856ce3f4e7e343078ad18e345de3a6e1",
+                                "type": "instance"
+                            }
+                        },
+                        "liftType": "DEADLIFT",
+                        "repetition": 10,
+                        "weight": "120.00",
+                        "time": "2015-07-11T10:15:30.100Z"
+                    }
+                ]
+            }
+            
+# Group Users
+User resursi Strong Lift API-ja
+Svi request-ovi moraju biti autentifikovani.
+
+## Users collection [/users]
+### Register a new user [POST]
+
++ Request (application/json)
+
+    + Header
+    
+            Authorization: Basic ZHVzYW46dGVzdA==
+    
+    + Body
+
+            {
+                "username" : "dusan",
+                "password" : "test"
+            }
+        
++ Response 201 (application/json)
+
+## Lift [/users/{userId}]
+### Get a single User [GET]
+
++ Parameters
+    + userId: c60dc71ae2344f8092ae563247ac7001 (required, string) - The id of the User to retrieve.
+
++ Request (application/json)
+
+    + Header
+    
+            Authorization: Basic ZHVzYW46dGVzdA==
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+              "meta": {
+                "href": "http://127.0.0.1:8080/users/c60dc71ae2344f8092ae563247ac7001",
+                "type": "instance"
+              },
+              "id": "c60dc71ae2344f8092ae563247ac7001",
+              "username": "dusan",
+              "lifts": {
+                "meta": {
+                  "href": "http://127.0.0.1:8080/lifts",
+                  "type": "collection"
+                }
+              }
+            }
