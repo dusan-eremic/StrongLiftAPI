@@ -14,35 +14,38 @@ import org.slf4j.LoggerFactory;
 /**
  * Main class - API može biti pokrenut kao standalone Java app ili možete biti
  * deployed na aplikacioni server kao što je Tomcat
- * 
+ *
  * @author Dusan Eremic
  *
  */
 public class Main {
-	
+
 	/**
 	 * Base URL koji će biti korišćen u standalone modu
 	 */
 	public static final String BASE_URI = "http://localhost:8080/";
-	
+
 	/**
 	 * Logger
 	 */
 	private static final Logger log = LoggerFactory.getLogger(Main.class);
-	
+
 	/**
 	 * Main method.
 	 */
 	public static void main(String[] args) throws IOException {
-		
+
+		final int port = System.getenv("PORT") != null ? Integer.valueOf(System.getenv("PORT")) : 8080;
+    final URI baseUri = UriBuilder.fromUri("http://0.0.0.0/").port(port).build();
+
 		final HttpServer server = GrizzlyHttpServerFactory.createHttpServer(//
-				URI.create(BASE_URI), //
+				baseUri, //
 				new ApiApplication(ServiceFactory.get(FactoryImpl.IN_MEMORY))//
 				);
-		
+
 		log.info("Jersey app started with WADL available at "
-				+ "{}application.wadl", BASE_URI);
-		
+				+ "{}application.wadl", baseUri.toString());
+
 		log.info("Hit enter to stop it...");
 		System.in.read();
 		server.shutdownNow();
