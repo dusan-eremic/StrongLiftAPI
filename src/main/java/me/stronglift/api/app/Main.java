@@ -11,6 +11,8 @@ import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ws.rs.core.UriBuilder;
+
 /**
  * Main class - API može biti pokrenut kao standalone Java app ili možete biti
  * deployed na aplikacioni server kao što je Tomcat
