@@ -9,7 +9,6 @@
 
 	<groupId>me.stronglift.api</groupId>
 	<artifactId>StrongLiftAPI</artifactId>
-	<packaging>war</packaging>
 	<version>1.0</version>
 	<name>StrongLiftAPI</name>
 	<description>StrongLiftAPI RESTful API</description>
@@ -124,6 +123,18 @@
 				<configuration>
 					<mainClass>me.stronglift.api.Main</mainClass>
 				</configuration>
+			</plugin>
+			<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>2.4</version>
+					<executions>
+							<execution>
+									<id>copy-dependencies</id>
+									<phase>package</phase>
+									<goals><goal>copy-dependencies</goal></goals>
+							</execution>
+					</executions>
 			</plugin>
 		</plugins>
 	</build>
