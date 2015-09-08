@@ -35,7 +35,7 @@ public class Main {
 	/**
 	 * Main method.
 	 */
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, InterruptedException {
 
 		final int port = System.getenv("PORT") != null ? Integer.valueOf(System.getenv("PORT")) : 8080;
     final URI baseUri = UriBuilder.fromUri("http://0.0.0.0/").port(port).build();
@@ -45,11 +45,15 @@ public class Main {
 				new ApiApplication(ServiceFactory.get(FactoryImpl.IN_MEMORY))//
 				);
 
-		log.info("Jersey app started with WADL available at "
-				+ "{}application.wadl", baseUri.toString());
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+        @Override
+        public void run() {
+            server.shutdownNow();
+        }
+    });
 
-		log.info("Hit enter to stop it...");
-		System.in.read();
-		server.shutdownNow();
+		log.info("Jersey app started with WADL available at {}application.wadl", baseUri.toString());
+
+		Thread.currentThread().join();
 	}
 }
