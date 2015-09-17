@@ -1,15 +1,14 @@
 FORMAT: 1A
-HOST: http://api.stronglift.me/
+HOST: http://stronglift.herokuapp.com/
 
-# Strong Lift API
+# Specifikacija StrongLift veb servisa
 
 
-# Group Lifts
-Lift resursi Strong Lift API-ja. 
+# Group Veb servisi za resurs Lift
 
-## Lift collection [/lifts]
+## Resurs: Lift kolekcija [/lifts]
 
-### Get all Lifts [GET]
+### Vrati kolekciju Liftova [GET]
 
 + Request (application/json)
 
@@ -64,7 +63,7 @@ Lift resursi Strong Lift API-ja.
                 ]
             }
             
-### Create a new Lift [POST]
+### Dodaj novi Lift u kolekciju [POST]
 
 + Request (application/json)
 
@@ -116,9 +115,9 @@ Lift resursi Strong Lift API-ja.
           "moreInfo": "mailto:api@stronglift.me"
         }
             
-## Lift [/lifts/{liftId}]
+## Resurs: Lift [/lifts/{liftId}]
 
-### Get a single lift [GET]
+### Vrati jedan Lift po ID-ju [GET]
 
 + Parameters
     + liftId: 8754d653f0fd45de9fbd429272c0db5d (required, string) - The id of the Lift to retrieve.
@@ -151,7 +150,7 @@ Lift resursi Strong Lift API-ja.
               "time": "2015-07-11T10:15:30.100Z"
             }
 
-### Update a Lift [POST]
+### Ažuriraj lift po ID-ju [POST]
 
 + Parameters
      + liftId: 8754d653f0fd45de9fbd429272c0db5d (required, string) - The id of the Lift to be updated.
@@ -194,7 +193,7 @@ Lift resursi Strong Lift API-ja.
               "time": "2015-07-11T10:15:30.100Z"
             }
             
-### Delete a single lift [DELETE]
+### Obriši Lift po ID-ju [DELETE]
 
 + Parameters
     + liftId: 8754d653f0fd45de9fbd429272c0db5d (required, string) - The id of the Lift to be deleted.
@@ -208,8 +207,8 @@ Lift resursi Strong Lift API-ja.
 + Response 200 (application/json)
 
             
-## Lift records collection [/lifts/records]
-### Get list of Lift records [GET]
+## Resurs: Kolekcija Lift rekorda [/lifts/records]
+### Vrati kolekciju Lift rekorda [GET]
 
 + Request (application/json)
 
@@ -281,11 +280,10 @@ Lift resursi Strong Lift API-ja.
                 ]
             }
             
-# Group Users
-User resursi Strong Lift API-ja.
+# Group Veb servisi za resurs User
 
-## Users collection [/users]
-### Register a new user [POST]
+## Resurs: Kolekcija User-a [/users]
+### Dodaj (registruj) novog User-a u kolekciju [POST]
 
 + Request (application/json)
 
@@ -302,8 +300,8 @@ User resursi Strong Lift API-ja.
         
 + Response 201 (application/json)
 
-## User [/users/{userId}]
-### Get a single User [GET]
+## Resurs: User [/users/{userId}]
+### Vrati User-a po ID-ju [GET]
 
 + Parameters
     + userId: c60dc71ae2344f8092ae563247ac7001 (required, string) - The id of the User to retrieve.
